@@ -14,6 +14,9 @@ This file represents what I have learned about web programming.
 ## AWS
 
 Interesting things I have learned about AWS
+I copied my key from Windows into my WSL environment in order to SSH into my server.
+I need to use an elastic IP in order to have flexibility with my server moving forward.
+AWS has a lot of settings.
 
 ## HTML
 
