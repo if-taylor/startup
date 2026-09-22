@@ -88,20 +88,20 @@ For this deliverable I did the following.
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Rented EC2 server** - I did not complete this part of the deliverable.
-- [ ] **Leased domain name** - I did not complete this part of the deliverable.
-- [ ] **Server accessible** from my domain: [https://yourdomainnamehere.click](https://yourdomainnamehere.click) - I did not complete this part of the deliverable.
+- [x] **Rented EC2 server** - Rented a t3.nano and have the instance up and running
+- [x] **Leased domain name** - Leased the name livemygospel.click from NameCheap
+- [x] **Server accessible** from my domain: [Link Here](https://livemygospel.click)
 
 ## 🚀 HTML deliverable
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
 - [ ] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **HTML pages** - I did not complete this part of the deliverable.
-- [ ] **Proper HTML element usage** - I did not complete this part of the deliverable.
-- [ ] **Links** - I did not complete this part of the deliverable.
+- [x] **HTML pages** - Created pages for index (which has the dashboard and landing page), login, schedule, and planning
+- [x] **Proper HTML element usage** - Used head, body, nav, main, header, footer, and other elements such as forms and sections
+- [x] **Links** - Each page has a consistent navigation bar that allows the user to navigate between any page
 - [ ] **Text** - I did not complete this part of the deliverable.
-- [ ] **3rd party API placeholder** - I did not complete this part of the deliverable.
+- [x] **3rd party API placeholder** - Created a placeholder on my index.html page for where I will implement a 3rd-party weather API
 - [ ] **Images** - I did not complete this part of the deliverable.
 - [ ] **Login placeholder** - I did not complete this part of the deliverable.
 - [ ] **DB data placeholder** - I did not complete this part of the deliverable.

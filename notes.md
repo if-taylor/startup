@@ -25,6 +25,8 @@ I can access my github repo via VSCode by opening a WSL terminal, cloning my rep
 
 Using git status I can check if my current branch is up to date with my online repo.
 
+Git add to stage any changes I plan to commit. Commit to save them and push to send them.
+
 
 
 ## HTML
@@ -36,6 +38,11 @@ Head is used for metadata and other info the browser needs, while body is where 
 
 <meta charset="UTF-8"> and <meta name="viewport" content="width=device-width, initial-scale=1.0" /> are helpful for making sure things display properly.
 
+Duplicate head, nav bar, and footer across pages for consistency and navigation. Update page titles to display the right name on the browser tab.
+
+All the semantics of structuring an html document help later on when it needs to interact with all sorts of other programs.
+
+Make a form and include multiple inputs for making a login page. Make sure the label for and the input id match, so that they can be linked together. Use type password for hiding the text.
 
 
 ## React
