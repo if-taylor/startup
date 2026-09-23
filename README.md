@@ -96,7 +96,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
+- [X] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
 - [x] **HTML pages** - Created pages for index (which has the dashboard and landing page), login, schedule, and planning
 - [x] **Proper HTML element usage** - Used head, body, nav, main, header, footer, and other elements such as forms and sections
 - [x] **Links** - Each page has a consistent navigation bar that allows the user to navigate between any page

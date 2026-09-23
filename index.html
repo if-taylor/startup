@@ -20,37 +20,65 @@
     <main>
         <!-- User name will come from authentication -->
         <section>
-            <h2>Welcome, [User Name]!</h2>
+            <h2>Welcome to LiveMyGospel, [user]!</h2>
+            <p>LiveMyGospel is a scheduling and goal/habit tracking app for those who want to align their daily lives with their goals 
+                for the future and who they want to become.</p>
             <p>Here's your overview for today.</p>
         </section>
-        
+                <!-- Habits overview -->
+        <section>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Habit</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Habit 1</td>
+                        <td>not complete</td>
+                    </tr>
+                    <tr>
+                        <td>Habit 2</td>
+                        <td>complete</td>
+                    </tr>
+                    <tr>
+                        <td>Habit 3</td>
+                        <td>not complete</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
         <!-- Goals overview -->
         <section>
             <h2>Your Goals</h2>
 
-            <div>
-                <h3>Example Goal</h3>
-                <p>Progress: 60%</p>
-            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Goal</th>
+                        <th>Progress</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Example Goal</td>
+                        <td>60%</td>
+                    </tr>
+                    <tr>
+                        <td>Another Goal</td>
+                        <td>5%</td>
+                    </tr>
+                    <tr>
+                        <td>Third Goal</td>
+                        <td>25%</td>
+                    </tr>
+                </tbody>
+            </table>
 
             <div>
-                <h3>Another Goal</h3>
-                <p>Progress: 25%</p>
-            </div>
-        </section>
-        
-        <!-- Habits overview -->
-        <section>
-            <h2>Today's Habits</h2>
 
-            <div>
-                <h3>Example Habit</h3>
-                <p>Status: Completed</p>
-            </div>
-
-            <div>
-                <h3>Another Habit</h3>
-                <p>Status: Not completed</p>
             </div>
         </section>
         
@@ -59,13 +87,16 @@
             <h2>Upcoming Events</h2>
 
             <div>
-                <h3>9:00 AM - 10:00 AM</h3>
-                <p>Example event</p>
+                <h3>Example event</h3>
+                <p>9:00 AM - 10:00 AM</p>
+                <p>Location: the moon</p>
+                
             </div>
 
             <div>
-                <h3>12:00 PM - 1:00 PM</h3>
-                <p>Another example event</p>
+                <h3>Another event</h3>
+                <p>12:00 PM - 1:00 PM</p>
+                <p>Location: here</p>
             </div>
         </section>
 
