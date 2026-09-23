@@ -94,18 +94,16 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 ## 🚀 HTML deliverable
 
-For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
-
-- [X] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
+- [x] **Prerequisites** - I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
 - [x] **HTML pages** - Created pages for index (which has the dashboard and landing page), login, schedule, and planning
 - [x] **Proper HTML element usage** - Used head, body, nav, main, header, footer, and other elements such as forms and sections
 - [x] **Links** - Each page has a consistent navigation bar that allows the user to navigate between any page
-- [ ] **Text** - I did not complete this part of the deliverable.
+- [x] **Text** - Each page has text representing the different content and elements on the page
 - [x] **3rd party API placeholder** - Created a placeholder on my index.html page for where I will implement a 3rd-party weather API
-- [ ] **Images** - I did not complete this part of the deliverable.
-- [ ] **Login placeholder** - I did not complete this part of the deliverable.
-- [ ] **DB data placeholder** - I did not complete this part of the deliverable.
-- [ ] **WebSocket placeholder** - I did not complete this part of the deliverable.
+- [x] **Images** - Added a logo next to the main title on the homepage
+- [x] **Login placeholder** - Created a login page with placeholder for username display underneath. Home page also has a placeholder for displaying username (if user is logged in).
+- [x] **DB data placeholder** - Specific goals, habits, and events will all be loaded from a database because they will be tied to an individual user. Added HTML comments on index, planning, and schedule pages for areas that the database will be used
+- [x] **WebSocket placeholder** - Added a placeholder on index for where friends goals/habits will be shared live
 
 ## 🚀 CSS deliverable
 
