@@ -1,6 +1,11 @@
 # LiveMyGospel
 
+#### LINKS
 [My Notes](notes.md)
+[Website](https://livemygospel.click)
+[Startup domain](https://startup.livemygospel.click)
+[Modified Simon HTML deployed to my domain](https://simon.livemygospel.click)
+
 
 LiveMyGospel is a personal planning application designed to help people organize their goals, tasks, schedules, and commitments in one place. It is inspired by the PreachMyGospel app that missionaries use in the field, but adapted and simplified for everyday use by regular people. It helps users turn larger goals into manageable plans, organize their daily schedule, and keep track of the everyday responsibilities and habits that they want to stay on top of.
 
