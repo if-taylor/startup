@@ -2,8 +2,11 @@
 
 #### LINKS
 [My Notes](notes.md)
+
 [Website](https://livemygospel.click)
+
 [Startup domain](https://startup.livemygospel.click)
+
 [Modified Simon HTML deployed to my domain](https://simon.livemygospel.click)
 
 
