@@ -16,29 +16,31 @@
 
 <body>
     <header class="bg-dark text-white p-4">
-        <h1>LiveMyGospel</h1>
-        <img src="images/LiveMyGospelLogo.png" alt="LiveMyGospel logo" width="100">
+        <h1>
+            <img src="images/LiveMyGospelLogo.png" alt="LiveMyGospel logo" width="100">LiveMyGospel
+        </h1>
+
     </header>
     
     <nav>
         <a href="index.html">Home</a>
-        <a href="planning.html">Planning</a>
         <a href="schedule.html">Schedule</a>
+        <a href="planning.html">Planning</a>
         <a href="login.html">Login</a>
     </nav>
 
     <main class="container mt-4">
         <!-- User name will come from authentication -->
-        <section class="p-4 mb-4">
+        <section class="p-4 mb-2">
             <h2>Welcome to LiveMyGospel, [user]!</h2>
             <p>LiveMyGospel is a scheduling and goal/habit tracking app for those who want to align their daily lives with their goals 
                 for the future and who they want to become.</p>
-            <p>Here's your overview for today.</p>
         </section>
         
         <!-- Habits overview -->
         <!-- Habits on homepage will eventually be loaded from the database for the current user. -->
         <section class="p-4 mb-4">
+            <h3>Here's your overview for today.</h3>
             <table>
                 <thead>
                     <tr>
@@ -121,13 +123,13 @@
             <!-- Shared progress will eventually update in real time through WebSockets. -->
             <ul>
                 <li>
-                    <h3>Run a 5K</h3>
+                    <h4>Run a 5K</h4>
                     <p>Shared by Alex</p>
                     <p>Progress: 62%</p>
                 </li>
 
                 <li>
-                    <h3>Read Every Day</h3>
+                    <h4>Read Every Day</h4>
                     <p>Shared by Alex</p>
                     <p>Current streak: 12 days</p>
                 </li>

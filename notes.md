@@ -52,6 +52,8 @@ Instead of using px you can use rem, which is more responsive to things like the
 
 Using premade bootstrap classes is an easy way to quickly add CSS styling to your page.
 
+Using bootstrap classes m and p allows you to add margins and padding of specific sizes to your elements.
+
 ## React
 
 Interesting things I have learned about React
