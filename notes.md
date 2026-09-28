@@ -44,6 +44,13 @@ All the semantics of structuring an html document help later on when it needs to
 
 Make a form and include multiple inputs for making a login page. Make sure the label for and the input id match, so that they can be linked together. Use type password for hiding the text.
 
+## CSS
+
+#### *Interesting things I have learned about CSS*
+
+Instead of using px you can use rem, which is more responsive to things like the user's text size (for example if they use a setting with larger text size to read it more easily). 
+
+Using premade bootstrap classes is an easy way to quickly add CSS styling to your page.
 
 ## React
 

@@ -15,10 +15,11 @@
 </head>
 
 <body>
-    <header>
+    <header class="bg-dark text-white p-4">
         <h1>LiveMyGospel</h1>
         <img src="images/LiveMyGospelLogo.png" alt="LiveMyGospel logo" width="100">
     </header>
+    
     <nav>
         <a href="index.html">Home</a>
         <a href="planning.html">Planning</a>
@@ -28,7 +29,7 @@
 
     <main class="container mt-4">
         <!-- User name will come from authentication -->
-        <section>
+        <section class="p-4 mb-4">
             <h2>Welcome to LiveMyGospel, [user]!</h2>
             <p>LiveMyGospel is a scheduling and goal/habit tracking app for those who want to align their daily lives with their goals 
                 for the future and who they want to become.</p>
@@ -37,7 +38,7 @@
         
         <!-- Habits overview -->
         <!-- Habits on homepage will eventually be loaded from the database for the current user. -->
-        <section>
+        <section class="p-4 mb-4">
             <table>
                 <thead>
                     <tr>
@@ -62,7 +63,7 @@
             </table>
         </section>
         <!-- Goals overview -->
-        <section>
+        <section class="p-4 mb-4">
             <h2>Your Goals</h2>
 
             <!-- Goals will eventually be loaded from the database for the current user. -->
@@ -92,7 +93,7 @@
         </section>
         
         <!-- Upcoming events -->
-        <section>
+        <section class="p-4 mb-4">
             <h2>Upcoming Events</h2>
             <!-- Upcoming events will eventually be loaded from the database for the current user. -->
             <div>
@@ -110,12 +111,12 @@
         </section>
 
         <!-- Weather information from a third-party service -->
-        <section>
+        <section class="p-4 mb-4">
             <h2>Current Weather</h2>
             <p>Weather information will be displayed here.</p>
         </section>
 
-        <section>
+        <section class="p-4 mb-4">
             <h2>My Friends' Goals</h2>
             <!-- Shared progress will eventually update in real time through WebSockets. -->
             <ul>
