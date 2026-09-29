@@ -109,6 +109,7 @@ main {
 .schedule-timeline {
     display: flex;
     flex-direction: column;
+    position: relative;
     height: 73vh;
     min-height: 300px;
     max-height: 600px;
@@ -136,6 +137,29 @@ main {
     flex: 1;
     border-top: 1px solid #dee2e6;
 }
+
+.timeline-event {
+    position: absolute;
+    left: 105px;
+    right: 0;
+    height: 4rem;
+    padding: 0.75rem 1rem;
+    margin-right: 2.25rem;
+    background-color: rgb(230, 252, 255);
+    border-left: 4px solid #0d6efd;
+    border-radius: 0.4rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-event:nth-child(1){
+    top: 33rem;
+}
+
+.timeline-event:nth-child(2){
+    top: 48rem;
+    height: 6.5rem;
+}
+
 
 .schedule > button {
     display: block;
