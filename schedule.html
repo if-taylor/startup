@@ -33,27 +33,33 @@
     <main class="container mt-4">
         <h2>Schedule</h2>
 
-        <section class="p-4 mb-2">
-            <p>Next Day  /  Today  / Previous Day</p>
-            <button>←</button>
-            <button>→</button>
+        <section class="schedule-navigation">
+            <div class="date-navigation">
+                <button>← Previous Day</button>
+                <button>Today</button>
+                <button>Next Day →</button>
+            </div>
         </section>
-        <section class="p-4 mb-2">
+
+        <section class="schedule">
             <h2>Today's Schedule</h2>
             <h3>September 22, 2026</h3>
             <!-- Schedule events will eventually be loaded from the database for the current user. -->
+            <section class="schedule-timeline">
+                <article class="schedule-event">
+                    <time>8:00 AM</time>
+                    <div>
+                        <h3>Morning Routine</h3>
+                    </div>                
+                </article>
 
-            <article class="p-4">
-                <h3>Morning Routine</h3>
-                <time>8:00 AM</time>
-                <p>30 minutes</p>
-            </article>
-
-            <article class="p-4">
-                <h3>Work</h3>
-                <time>9:00 AM</time>
-                <p>3 hours</p>
-            </article>
+                <article class="schedule-event">
+                    <time>9:00 AM</time>
+                    <div>
+                        <h3>Work</h3>
+                    </div>   
+                </article>
+            </section>
 
             <!-- more events -->
              <button>Add Event</button>
