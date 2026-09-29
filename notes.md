@@ -54,6 +54,10 @@ Using premade bootstrap classes is an easy way to quickly add CSS styling to you
 
 Using bootstrap classes m and p allows you to add margins and padding of specific sizes to your elements.
 
+You can use flex to make your objects move more dynamically as you resize the window. Justify with space-between to fill available space with your content.
+
+You can use a media query to make the contents style change based on things like the size of the viewport changing in order to better accomodate the limitations of smaller screens.
+
 ## React
 
 Interesting things I have learned about React
