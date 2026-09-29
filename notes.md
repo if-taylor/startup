@@ -58,6 +58,10 @@ You can use flex to make your objects move more dynamically as you resize the wi
 
 You can use a media query to make the contents style change based on things like the size of the viewport changing in order to better accomodate the limitations of smaller screens.
 
+Setting a max-height or width and building in automatic overflow allows you to create an element that you can scroll in within the larger page.
+
+Relative and absolute positioning allows you to have overlapping elements and reposition them how you want without affecting the other elements.
+
 ## React
 
 Interesting things I have learned about React

@@ -177,6 +177,71 @@ main {
     background-color: #eaeff5;
 }
 
+
+.login-section {
+    max-width: 450px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-section h2 {
+    font-size: 1.65rem;
+    color: #1a2024;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.login-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.login-section label {
+    font-weight: 550;
+}
+
+.login-section input {
+    width: 100%;
+    padding: 0.6rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.4rem;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.login-section button {
+    display: flex;
+    align-self: center;
+    padding: 0.6rem 2.5rem;
+    margin: 0.35rem;
+    color: white;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 0.4rem;
+    background-color: rgb(43, 84, 167);
+
+}
+
+.login-section p {
+    text-align: center;
+    padding: 1rem;
+}
+
+.login-section p a {
+    color: #0d6efd;
+    margin-left: 0.4rem;
+    text-decoration: none;
+}
+
+.login-section p a:hover {
+    text-decoration: underline;
+}
+
 @media (max-width: 750px) {
     .nav-brand {
         padding-left: 1.2rem;
