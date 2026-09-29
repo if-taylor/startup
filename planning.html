@@ -31,88 +31,129 @@
     </header>
 
     <main class="container mt-4">
-        <h2>Planning</h2>
         <!-- User goals and habits will eventually be loaded from a database. -->
-         
-        <section class="p-4 mb-2">
-            <h3>Habits</h3>
-        
-            <ul>
-                <li>
-                    <button>
-                        <h3>Exercise</h3>
-                        <p>Every weekday</p>
-                    </button>
-                </li>
+        <section class="planning">
+            <section class="planning-section">
+                <h3>Habits</h3>
+            
+                <ul>
+                    <li>
+                        <button class="habit-item">
+                            <div class="item-header">
+                                <h3>Exercise</h3>
+                                <span>Every weekday</span>
+                            </div>
+                        </button>
+                    </li>
 
-                <li>
-                    <button>
-                        <h3>Read Scriptures</h3>
-                        <p>Every day</p>
-                    </button>
-                </li>
+                    <li>
+                        <button class="habit-item">
+                            <div class="item-header">
+                                <h3>Read Scriptures</h3>
+                                <span>Every day</span>
+                            </div>
+                        </button>
+                    </li>
 
-                <li>
-                    <button>
-                        <h3>Study Spanish</h3>
-                        <p>3 times per week</p>
-                    </button>
-                </li>
-            </ul>
-            <button>New Habit</button>
-        </section>
+                    <li>
+                        <button class="habit-item">
+                            <div class="item-header">
+                                <h3>Build my Website</h3>
+                                <span>3 times per week</span>
+                            </div>
+                        </button>
+                    </li>
+                </ul>
+                <button>New Habit</button>
+            </section>
 
-        <section class="p-4 mb-2">
-            <h3>Goals</h3>
-            <p>It is recommended to have at most 2-3 current goals</p>
-            <ul>
-                <li>
-                    <button>
-                        <h3>Read Old Testament</h3>
-                        <p>Progress: 60%</p>
-                        <p>Deadline: October 25th</p>
-                    </button>
-                </li>
+            <section class="planning-section">
+                <h3>Goals</h3>
+                <p>It is recommended to have at most 2-3 current goals</p>
+                <ul>
+                    <li>
+                        <button class="goal-item">
+                            <div class="item-header">
+                                <h3>Read Old Testament</h3>
+                                <span>October 25th</span>
+                            </div>
 
-                <li>
-                    <button>
-                        <h3>Build my Website</h3>
-                        <p>Progress: 25%</p>
-                        <p>Deadline: December 1st</p>
-                    </button>
-                </li>
-            </ul>
-            <button>New Goal</button>
-        </section>
+                            <p>Progress: 60%</p>
 
-        <section class="p-4 mb-2">
-            <h3>Past Goals</h3>
-            <p>Here are the goals you've completed!</p>
-            <ul>
-                <li>
-                    <button>
-                        <h3>Read Book of Mormon</h3>
-                        <p>Progress: 100%</p>
-                        <p>Finished: July 12th</p>
-                    </button>
-                </li>
+                            <div class="progress-bar">
+                                <div class="progress"></div>
+                            </div>
+                        </button>
+                    </li>
 
-                <li>
-                    <button>
-                        <h3>Learn Piano Piece</h3>
-                        <p>Progress: 100%</p>
-                        <p>Finished: May 5th</p>
-                    </button>
-                </li>
+                    <li>
+                        <button class="goal-item">
+                            <div class="item-header">
+                                <h3>Build my Website</h3>
+                                <span>December 1st</span>
+                            </div>
 
-                <li>
-                    <button>
-                        <h3>Run a Marathon</h3>
-                        <p>Progress: 100%</p>
-                        <p>Finished: November 19th, 2025</p>
-                    </button>
-                </li>
-            </ul>
+                            <p>Progress: 25%</p>
+
+                            <div class="progress-bar">
+                                <div class="progress"></div>
+                            </div>
+                        </button>
+                    </li>
+                </ul>
+                <button>New Goal</button>
+            </section>
+
+            <section class="planning-section">
+                <h3>Past Goals</h3>
+                <p>Here are the goals you've completed!</p>
+                <ul>
+                    <li>
+                        <button class="goal-item">
+                            <div class="item-header">
+                                <h3>Read Book of Mormon</h3>
+                                <span>Finished: July 12th</span>
+                            </div>
+
+                            <p>Progress: 100%</p>
+
+                            <div class="progress-bar">
+                                <div class="progress"></div>
+                            </div>
+                        </button>
+                    </li>
+
+                    <li>
+                        <button class="goal-item">
+                            <div class="item-header">
+                                <h3>Learn Piano Piece</h3>
+                                <span>Finished: May 5th</span>
+                            </div>
+
+                            <p>Progress: 100%</p>
+
+                            <div class="progress-bar">
+                                <div class="progress"></div>
+                            </div>
+                        </button>
+                    </li>
+
+                    <li>
+                        <button class="goal-item">
+                            <div class="item-header">
+                                <h3>Run a Marathon</h3>
+                                <span>Finished: November 19th, 2025</span>
+                            </div>
+
+                            <p>Progress: 100%</p>
+
+                            <div class="progress-bar">
+                                <div class="progress"></div>
+                            </div>
+                        </button>
+                    </li>
+                </ul>
+            </section>
         </section>
     </main>
 
