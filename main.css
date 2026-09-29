@@ -52,6 +52,122 @@ main {
     background-color: #343a40;
 }
 
+footer {
+    margin-top: 3rem;
+    padding: 1.5rem;
+    background-color: #212529;
+    color: #adb5bd;
+    text-align: center;
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.home-welcome {
+    text-align: center;
+    padding: 2rem;
+    margin-bottom: 1rem;
+}
+
+
+.habits-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+.habits-table th {
+    font-weight: 600;
+    background-color: #f8f9fa;
+}
+
+.habits-table th,
+.habits-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #dee2e6;
+    text-align: left;
+}
+
+.goals-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+.goals-table th {
+    font-weight: 600;
+    background-color: #f8f9fa;
+}
+
+.goals-table th,
+.goals-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #dee2e6;
+    text-align: left;
+}
+
+.habits-table th:first-child,
+.habits-table td:first-child,
+.goals-table th:first-child,
+.goals-table td:first-child {
+    width: 55%;
+}
+
+
+.upcoming-event {
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    background-color: rgb(242, 245, 246);
+    border-left: 4px solid #0d6efd;
+    border-radius: 0.4rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.upcoming-event h3 {
+    margin-bottom: 0.25rem;
+}
+
+.upcoming-event p {
+    margin: 0.15rem 0;
+    color: #6c757d;
+}
+
+.weather-section {
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+.weather-section p {
+    color: #6c757d;
+}
+
+.friends-goals {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.friends-goals li {
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    background-color: white;
+    border-radius: 0.5rem;
+}
+
+.friends-goals h4 {
+    margin-bottom: 0.25rem;
+}
+
+.friends-goals p {
+    margin: 0.15rem 0;
+    color: #6c757d;
+}
 
 .schedule {
     padding: 1.5rem;

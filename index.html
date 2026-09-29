@@ -32,7 +32,7 @@
 
     <main class="container mt-4">
         <!-- User name will come from authentication -->
-        <section class="p-4 mb-2">
+        <section class="home-welcome">
             <h2>Welcome to LiveMyGospel, [user]!</h2>
             <p>LiveMyGospel is a scheduling and goal/habit tracking app for those who want to align their daily lives with their goals 
                 for the future and who they want to become.</p>
@@ -42,7 +42,7 @@
         <!-- Habits on homepage will eventually be loaded from the database for the current user. -->
         <section class="p-4 mb-4">
             <h3>Here's your overview for today.</h3>
-            <table>
+            <table class="habits-table">
                 <thead>
                     <tr>
                         <th>Habit</th>
@@ -67,10 +67,10 @@
         </section>
         <!-- Goals overview -->
         <section class="p-4 mb-4">
-            <h2>Your Goals</h2>
+            <h3>Your Goals</h3>
 
             <!-- Goals will eventually be loaded from the database for the current user. -->
-            <table>
+            <table class="goals-table">
                 <thead>
                     <tr>
                         <th>Goal</th>
@@ -99,14 +99,14 @@
         <section class="p-4 mb-4">
             <h2>Upcoming Events</h2>
             <!-- Upcoming events will eventually be loaded from the database for the current user. -->
-            <div>
+            <div class="upcoming-event">
                 <h3>Example event</h3>
                 <p>9:00 AM - 10:00 AM</p>
                 <p>Location: the moon</p>
                 
             </div>
 
-            <div>
+            <div class="upcoming-event">
                 <h3>Another event</h3>
                 <p>12:00 PM - 1:00 PM</p>
                 <p>Location: here</p>
@@ -114,7 +114,7 @@
         </section>
 
         <!-- Weather information from a third-party service -->
-        <section class="p-4 mb-4">
+        <section class="weather-section p-4 mb-4">
             <h2>Current Weather</h2>
             <p>Weather information will be displayed here.</p>
         </section>
@@ -122,7 +122,7 @@
         <section class="p-4 mb-4">
             <h2>My Friends' Goals</h2>
             <!-- Shared progress will eventually update in real time through WebSockets. -->
-            <ul>
+            <ul class="friends-goals">
                 <li>
                     <h4>Run a 5K</h4>
                     <p>Shared by Alex</p>
