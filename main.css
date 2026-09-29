@@ -52,61 +52,106 @@ main {
     background-color: #343a40;
 }
 
-.schedule-navigation {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    background-color: white;
-    border-radius: 0.5rem;
-}
-
-.date-navigation {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.date-navigation button {
-    padding: 0.6rem 1rem;
-    border: 1px solid #ced4da;
-    border-radius: 0.4rem;
-    background-color: white;
-    cursor: pointer;
-}
 
 .schedule {
     padding: 1.5rem;
+    padding-bottom: 0.25rem;
     background-color: white;
-    border: 1px solid #e1e5e9;
+    border: 3px solid #eef2f6;
     border-radius: 0.5rem;
 }
 
-.schedule h2 {
-    margin-bottom: 0.25rem;
+.schedule h3 {
+    font-size: 1rem;
+    color: #404b55;
+    font-weight: 600;
+    text-decoration: underline;
+    padding-left: 1rem;
 }
 
-.schedule h3 {
-    margin-top: 0;
-    color: #6c757d;
+.schedule h2 {
+    font-size: 1.65rem;
+    color: #1a2024;
+    font-weight: 600;
+    padding-left: 1rem;
+    margin-bottom: -0.65rem;
+}
+
+.schedule-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 0.5rem;
+}
+
+.schedule-navigation button {
+    padding: 0.35rem 0.75rem;
+    border: none;
+    background-color: transparent;
+    color: #495057;
     font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.schedule-navigation button:hover {
+    background-color: #eaeff5;
+}
+
+.schedule-navigation button:nth-child(4) {
+    padding: 0.35rem;
+    margin-left: -0.35rem;
 }
 
 .schedule-timeline {
-    display: grid;
-    grid-template-columns: 70px 1fr;
-    gap: 0.5rem;
-    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    height: 73vh;
+    min-height: 300px;
+    max-height: 600px;
+    overflow-y: auto;
+    padding-left: 1.25rem;
+    padding-right: 1.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.4rem;
+}
+
+.timeline-hour {
+    display: flex;
+    align-items: center;
+    min-height: 70px;
+}
+
+.timeline-hour time {
+    width: 75px;
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.timeline-hour::after {
+    content: "";
+    flex: 1;
     border-top: 1px solid #dee2e6;
 }
 
-.schedule-event {
-    display: grid;
-    grid-template-columns: 70px 1fr;
-    gap: 0.5rem;
+.schedule > button {
+    display: block;
+    margin: 1rem auto;
+    padding: 0.5rem 1.25rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.4rem;
+    background-color: white;
+    color: #495057;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
+.schedule > button:hover {
+    background-color: #eaeff5;
+}
 
 @media (max-width: 750px) {
     .nav-brand {
@@ -142,4 +187,5 @@ main {
     .nav-links a:hover {
         background-color: #4d535a;
     }
+
 }
