@@ -109,7 +109,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **Text** - Each page has text representing the different content and elements on the page
 - [x] **3rd party API placeholder** - Created a placeholder on my index.html page for where I will implement a 3rd-party weather API
 - [x] **Images** - Added a logo next to the main title on the homepage
-- [x] **Login placeholder** - Created a login page with placeholder for username display underneath. Home page also has a placeholder for displaying username (if user is logged in).
+- [x] **Login placeholder** - Created a login page with placeholder for username display underneath. Home page also has a placeholder for displaying username (if user is logged in)
 - [x] **DB data placeholder** - Specific goals, habits, and events will all be loaded from a database because they will be tied to an individual user. Added HTML comments on index, planning, and schedule pages for areas that the database will be used
 - [x] **WebSocket placeholder** - Added a placeholder on index for where friends goals/habits will be shared live
 
@@ -117,13 +117,13 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **Visually appealing colors and layout. No overflowing elements.** - I did not complete this part of the deliverable.
-- [ ] **Use of a CSS framework** - I did not complete this part of the deliverable.
-- [ ] **All visual elements styled using CSS** - I did not complete this part of the deliverable.
-- [ ] **Responsive to window resizing using flexbox and/or grid display** - I did not complete this part of the deliverable.
-- [ ] **Use of a imported font** - I did not complete this part of the deliverable.
-- [ ] **Use of different types of selectors including element, class, ID, and pseudo selectors** - I did not complete this part of the deliverable.
+- [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
+- [x] **Visually appealing colors and layout. No overflowing elements.** - Used shades of blue, gray, and white to make a consistent a visually appealing website. Used borders, containers, margins, and padding to create a sleek and intuitive layout
+- [x] **Use of a CSS framework** - Used bootstrap for classes such as container, mt-4, p-4, and display
+- [x] **All visual elements styled using CSS** - All visual elements have been styled using CSS, including header and navbar, headings and sections on pages, forms, buttons, and tables
+- [x] **Responsive to window resizing using flexbox and/or grid display** - I used flexboxes throughout the page in order to make the page adapt responsively to different screen sizes/resizing. I also included a media query that alters the navbar when the page is too thin
+- [x] **Use of a imported font** - I imported the Roboto font and used it throughout the page
+- [x] **Use of different types of selectors including element, class, ID, and pseudo selectors** - I used element selectors for things like main, body, and footer. I used class selectors throughout the project in order to create specifically styled sections, lists, buttons, and tables. I used an ID selector for the main welcome message and I used pseudo selectors to edit specific items in tables or to make buttons change their color when hovered over.
 
 ## 🚀 React part 1: Routing deliverable
 

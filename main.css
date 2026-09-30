@@ -1,7 +1,8 @@
 body {
-    font-family: sans-serif;
+    font-family: "Roboto", sans-serif;
     background-color: #f5f7fa;
     color: #212529;
+    
 }
 
 main {
@@ -71,6 +72,12 @@ footer p {
     margin-bottom: 1rem;
 }
 
+#welcome-heading {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-decoration: underline;
+    margin-bottom: 1rem;
+}
 
 .habits-table {
     width: 100%;
@@ -127,6 +134,7 @@ footer p {
 
 .upcoming-event h3 {
     margin-bottom: 0.25rem;
+    font-size: 1.35rem;
 }
 
 .upcoming-event p {
@@ -135,7 +143,7 @@ footer p {
 }
 
 .weather-section {
-    max-width: 500px;
+    max-width: 600px;
     margin-left: auto;
     margin-right: auto;
     background-color: white;
@@ -160,8 +168,9 @@ footer p {
     border-radius: 0.5rem;
 }
 
-.friends-goals h4 {
+.friends-goals h3 {
     margin-bottom: 0.25rem;
+    font-size: 1.35rem;
 }
 
 .friends-goals p {
