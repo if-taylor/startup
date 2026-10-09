@@ -6,10 +6,10 @@ export function Login() {
             <section className="login-section">
                 <h2>Sign In</h2>
                 <form>
-                    <label for="email">Email:</label>
+                    <label htmlFor="email">Email:</label>
                     <input type="email" id="email" name="email" />
 
-                    <label for="password">Password:</label>
+                    <label htmlFor="password">Password:</label>
                     <input type="password" id="password" name="password" />
 
                     <button type="submit">Login</button>

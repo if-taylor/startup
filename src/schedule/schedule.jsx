@@ -16,6 +16,7 @@ export function Schedule() {
                 
                 <section className="schedule-timeline">
                     <div className="timeline-hours">
+                        {/*Current static html will eventually be replaced by more elegant solution*/}
                         <div className="timeline-hour">
                             <time>12:00 AM</time>
                         </div>
