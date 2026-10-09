@@ -11,7 +11,7 @@ import { Login } from "./login/login";
 export default function App() {
     return(
     <BrowserRouter>
-        <div className="body bg-dark text-light">
+        <div className="body">
             <header>
                 <nav className="navbar">
                     <NavLink className="nav-brand" to="/">
