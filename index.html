@@ -1,151 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LiveMyGospel</title>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/LiveMyGospelLogo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
 
-    <!-- Import bootstrap framework -->
-    <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    >
-
-    <link rel="stylesheet" href="main.css">
-
-    <link rel="icon" href="images/LiveMyGospelLogoNew.png">
-
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-</head>
-
-<body>
-    <header>
-        <nav class="navbar">
-            <a href="index.html" class="nav-brand">
-                <img src="images/LiveMyGospelLogoNew.png" alt="LiveMyGospel Logo">
-                <span>LiveMyGospel</span>
-            </a>
-
-            <div class="nav-links">
-                <a href="schedule.html">SCHEDULE</a>
-                <a href="planning.html">PLANNING</a>
-                <a href="login.html">LOGIN</a>
-            </div>
-        </nav>
-    </header>
-
-    <main class="container mt-4">
-        <!-- User name will come from authentication -->
-        <section class="home-welcome">
-            <h2 id="welcome-heading">Welcome to LiveMyGospel, [user]!</h2>
-            <p class="text-muted">LiveMyGospel is a scheduling and goal/habit tracking app for those who want to align their daily lives with their goals 
-                for the future and who they want to become.</p>
-        </section>
-        
-        <!-- Habits overview -->
-        <!-- Habits on homepage will eventually be loaded from the database for the current user. -->
-        <section class="p-4 mb-4">
-            <h2 class="fw-light fs-4">Here's your overview for today.</h2>
-            <table class="habits-table">
-                <thead>
-                    <tr>
-                        <th>Habit</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Habit 1</td>
-                        <td>not complete</td>
-                    </tr>
-                    <tr>
-                        <td>Habit 2</td>
-                        <td>complete</td>
-                    </tr>
-                    <tr>
-                        <td>Habit 3</td>
-                        <td>not complete</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-        <!-- Goals overview -->
-        <section class="p-4 mb-4">
-            <h2 class="fw-light fs-4">Your Goals</h2>
-
-            <!-- Goals will eventually be loaded from the database for the current user. -->
-            <table class="goals-table">
-                <thead>
-                    <tr>
-                        <th>Goal</th>
-                        <th>Progress</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Example Goal</td>
-                        <td>60%</td>
-                    </tr>
-                    <tr>
-                        <td>Another Goal</td>
-                        <td>5%</td>
-                    </tr>
-                    <tr>
-                        <td>Third Goal</td>
-                        <td>25%</td>
-                    </tr>
-                </tbody>
-            </table>
-
-        </section>
-        
-        <!-- Upcoming events -->
-        <section class="p-4 mb-4">
-            <h3 class="fw-light fs-4">Upcoming Events</h3>
-            <!-- Upcoming events will eventually be loaded from the database for the current user. -->
-            <div class="upcoming-event">
-                <h3>Example event</h3>
-                <p>9:00 AM - 10:00 AM</p>
-                <p>Location: the moon</p>
-                
-            </div>
-
-            <div class="upcoming-event">
-                <h3>Another event</h3>
-                <p>12:00 PM - 1:00 PM</p>
-                <p>Location: here</p>
-            </div>
-        </section>
-
-        <!-- Weather information from a third-party service -->
-        <section class="weather-section p-4 mb-4">
-            <h3 class="fw-light fs-4">Current Weather</h3>
-            <p>Weather information will be displayed here.</p>
-        </section>
-
-        <section class="p-4 mb-4">
-            <h2 class="fw-light fs-4">My Friends' Goals</h2>
-            <!-- Shared progress will eventually update in real time through WebSockets. -->
-            <ul class="friends-goals">
-                <li>
-                    <h3>Run a 5K</h3>
-                    <p>Shared by Alex</p>
-                    <p>Progress: 62%</p>
-                </li>
-
-                <li>
-                    <h3>Read Every Day</h3>
-                    <p>Shared by Alex</p>
-                    <p>Current streak: 12 days</p>
-                </li>
-            </ul>
-        </section>
-    </main>
-
-
-    <footer>
-        <p>LiveMyGospel by Taylor Richins</p>
-        <p><a href="https://github.com/if-taylor/startup">GitHub Repository</a></p>
-    </footer>
-</body>
+    <title>Live My Gospel</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/index.jsx"></script>
+  </body>
 </html>

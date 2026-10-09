@@ -18,19 +18,19 @@ It is easy to have goals for how you want to live your life, but much harder to 
 
 The main screen of LiveMyGospel will be a daily schedule
 
-![Daily schedule](images/schedule.png)
+![Daily schedule](public/schedule.png)
 
 The tracking screen will allow users to have a quick overview of their goals and habits
 
-![Tracking](images/tracking.png)
+![Tracking](public/tracking.png)
 
 The planning screen allows users to view and manage their current goals and habits 
 
-![Planning](images/planning.png)
+![Planning](public/planning.png)
 
 The create/edit screen is used for creating or editing a specific goal or habit
 
-![Create/Edit](images/create-edit.png)
+![Create/Edit](public/create-edit.png)
 
 Here is a diagram of how users can share and keep tabs on each other's goals for accountability
 
