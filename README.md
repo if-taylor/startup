@@ -127,10 +127,10 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **Bundled using Vite** - I did not complete this part of the deliverable.
-- [ ] **Components** - I did not complete this part of the deliverable.
-- [ ] **Router** - I did not complete this part of the deliverable.
+- [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
+- [x] **Bundled using Vite** - I installed Vite to my production environment and got everything bundled
+- [x] **Components** - I changed my index.html to a dashboard page. Followed the format for Simon to get all my components set up properly. Find and replace was my friend for changing class to className and fixing the formatting of comments. Otherwise, the process was fairly easy. They all get their styling from my global app.css file, so no need for individual css files at this point.
+- [x] **Router** - Set up the router as described in the Simon-react-p1 assignment. My site successfully navigates between all the pages and they all display properly
 
 ## 🚀 React part 2: Reactivity deliverable
 

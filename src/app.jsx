@@ -20,9 +20,9 @@ export default function App() {
                     </NavLink>
 
                     <div className="nav-links">
-                        <NavLink className="nav-link" to="schedule">SCHEDULE</NavLink>
-                        <NavLink className="nav-link" to="planning">PLANNING</NavLink>
-                        <NavLink className="nav-link" to="login">LOGIN</NavLink>
+                        <NavLink to="schedule">SCHEDULE</NavLink>
+                        <NavLink to="planning">PLANNING</NavLink>
+                        <NavLink to="login">LOGIN</NavLink>
                     </div>
                 </nav>
             </header>
