@@ -4,7 +4,7 @@
     font-family: "Roboto", sans-serif;
     background-color: #f5f7fa;
     color: #212529;
-    
+
 }
 
 main {
@@ -81,8 +81,10 @@ footer p {
     margin-bottom: 1rem;
 }
 
-.habits-table {
+.habits-table,
+.goals-table {
     width: 100%;
+    table-layout: fixed;
     border-collapse: collapse;
     background-color: white;
 }
@@ -97,12 +99,6 @@ footer p {
     padding: 0.75rem 1rem;
     border-bottom: 1px solid #dee2e6;
     text-align: left;
-}
-
-.goals-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
 }
 
 .goals-table th {
@@ -121,7 +117,21 @@ footer p {
 .habits-table td:first-child,
 .goals-table th:first-child,
 .goals-table td:first-child {
-    width: 55%;
+    width: 45%;
+}
+
+.habits-table th:nth-child(2),
+.habits-table td:nth-child(2),
+.goals-table th:nth-child(2),
+.goals-table td:nth-child(2) {
+    width: 22%;
+}
+
+.habits-table th:nth-child(3),
+.habits-table td:nth-child(3),
+.goals-table th:nth-child(3),
+.goals-table td:nth-child(3) {
+    width: 33%;
 }
 
 
@@ -322,7 +332,7 @@ footer p {
 }
 
 
-.schedule > button {
+.schedule>button {
     display: block;
     margin: 1rem auto;
     padding: 0.5rem 1.25rem;
@@ -334,7 +344,7 @@ footer p {
     transition: background-color 0.2s;
 }
 
-.schedule > button:hover {
+.schedule>button:hover {
     background-color: #eaeff5;
 }
 
@@ -352,7 +362,7 @@ footer p {
     margin-bottom: 1rem;
 }
 
-.planning-section > h3 { 
+.planning-section>h3 {
     font-weight: 600;
 }
 
@@ -380,7 +390,7 @@ footer p {
     border-color: #adb5bd;
 }
 
-.planning-section > button {
+.planning-section>button {
     margin: 1rem auto;
     padding: 0.5rem 1.25rem;
     border: 1px solid #ced4da;
@@ -391,11 +401,11 @@ footer p {
     transition: background-color 0.2s;
 }
 
-.planning-section > button:hover {
+.planning-section>button:hover {
     background-color: #eaeff5;
 }
 
-.habit-item{
+.habit-item {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -409,7 +419,7 @@ footer p {
     transition: background-color 0.2s;
 }
 
-.goal-item{
+.goal-item {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -518,7 +528,7 @@ footer p {
         padding-left: 1.2rem;
         padding-bottom: 0.5rem;
     }
-    
+
     .nav-brand img {
         display: none;
     }
