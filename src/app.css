@@ -399,6 +399,20 @@ footer p {
     color: gray;
 }
 
+.goal-progress-bar {
+    width: 100%;
+    height: 12px;
+    border: 1px solid #adb5bd;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.goal-progress-fill {
+    height: 100%;
+    background-color: #6c757d;
+    border-radius: 5px;
+}
+
 .login-section {
     max-width: 450px;
     margin: 2rem auto;

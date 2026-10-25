@@ -363,7 +363,7 @@ export function Planning() {
                             </li>
                         ))}
                     </ul>
-                    <Button
+                    <button
                         onClick={() => {
                             setEditingHabitId(null);
                             setNewHabitName('');
@@ -374,7 +374,7 @@ export function Planning() {
                         }}
                     >
                         New Habit
-                    </Button>
+                    </button>
                 </section>
 
                 <section className="planning-section">
@@ -399,9 +399,9 @@ export function Planning() {
 
                                             <p>Progress: {progress}%</p>
 
-                                            <div className="progress-bar">
+                                            <div className="goal-progress-bar">
                                                 <div
-                                                    className="progress"
+                                                    className="goal-progress-fill"
                                                     style={{ width: `${progress}%` }}
                                                 ></div>
                                             </div>
@@ -411,9 +411,9 @@ export function Planning() {
                             })}
                     </ul>
 
-                    <Button onClick={openNewGoalModal}>
+                    <button onClick={openNewGoalModal}>
                         New Goal
-                    </Button>
+                    </button>
                 </section>
 
                 <section className="planning-section">
@@ -439,9 +439,9 @@ export function Planning() {
 
                                         <p>Progress: 100%</p>
 
-                                        <div className="progress-bar">
+                                        <div className="goal-progress-bar">
                                             <div
-                                                className="progress"
+                                                className="goal-progress-fill"
                                                 style={{ width: '100%' }}
                                             ></div>
                                         </div>
