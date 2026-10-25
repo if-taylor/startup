@@ -250,7 +250,7 @@ footer p {
 
 .timeline-hour {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     height: 60px;
     min-height: 60px;
 }
@@ -281,6 +281,13 @@ footer p {
     position: absolute;
     left: 105px;
     right: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.15rem;
     padding: 0.75rem 1rem;
     margin-right: 2.25rem;
     background-color: rgb(230, 252, 255);
@@ -291,6 +298,27 @@ footer p {
     text-align: left;
     pointer-events: auto;
     cursor: pointer;
+}
+
+.timeline-event.short-event {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    padding: 0 0.5rem;
+    font-size: 0.8rem;
+}
+
+.timeline-event.short-event strong,
+.timeline-event.short-event span {
+    line-height: 1;
+    white-space: nowrap;
+    font-size: 0.8rem;
+}
+
+.timeline-event span {
+    color: #6c757d;
+    font-size: 0.9rem;
 }
 
 

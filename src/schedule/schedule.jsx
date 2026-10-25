@@ -127,6 +127,15 @@ export function Schedule() {
         return hours * 60 + minutes;
     }
 
+    function formatTime(time) {
+        const [hours, minutes] = time.split(':').map(Number);
+
+        const period = hours >= 12 ? 'PM' : 'AM';
+        const displayHour = hours % 12 || 12;
+
+        return `${displayHour}:${minutes.toString().padStart(2, '0')} ${period}`;
+    }
+
     return (
         <main className="container mt-4">
 
@@ -167,6 +176,8 @@ export function Schedule() {
                             .map((event) => {
                                 const startMinutes = timeToMinutes(event.startTime);
                                 const endMinutes = timeToMinutes(event.endTime);
+                                const duration = endMinutes - startMinutes;
+                                const isShortEvent = duration < 30;
 
                                 const top = (startMinutes / 60) * hourHeight;
                                 const height = ((endMinutes - startMinutes) / 60) * hourHeight;
@@ -174,16 +185,16 @@ export function Schedule() {
                                 return (
                                     <button
                                         key={event.id}
-                                        className="timeline-event"
+                                        className={`timeline-event ${isShortEvent ? 'short-event' : ''}`}
                                         onClick={() => openEventModal(event)}
                                         style={{
                                             top: `${top}px`,
-                                            height: `${height}px`,
+                                            height: `${Math.max(height, 24)}px`,
                                         }}
                                     >
                                         <strong>{event.name}</strong>
                                         <span>
-                                            {event.startTime} – {event.endTime}
+                                            {formatTime(event.startTime)} – {formatTime(event.endTime)}
                                         </span>
                                     </button>
                                 );
