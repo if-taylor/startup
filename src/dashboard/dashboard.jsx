@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function Dashboard() {
+export function Dashboard({ userName }) {
     const [habits, setHabits] = React.useState(() => {
         const savedHabits = localStorage.getItem('habits');
         return savedHabits ? JSON.parse(savedHabits) : [];
@@ -287,7 +287,9 @@ export function Dashboard() {
         <main className="container mt-4">
             {/* User name will come from authentication */}
             <section className="home-welcome">
-                <h2 id="welcome-heading">Welcome to LiveMyGospel, [user]!</h2>
+                <h2 id="welcome-heading">
+                    Welcome to LiveMyGospel{userName ? `, ${userName.split('@')[0]}` : ''}!
+                </h2>
                 <p className="text-muted">LiveMyGospel is a scheduling and goal/habit tracking app for those who want to align their daily lives with their goals
                     for the future and who they want to become.</p>
             </section>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 
-export function Schedule() {
+export function Schedule({ userName }) {
 
     const [events, setEvents] = React.useState(() => {
         const savedEvents = localStorage.getItem('events');

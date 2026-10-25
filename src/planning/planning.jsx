@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 
-export function Planning() {
+export function Planning({ userName }) {
     const [habits, setHabits] = React.useState(() => {
         const savedHabits = localStorage.getItem('habits');
 
