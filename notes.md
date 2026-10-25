@@ -64,4 +64,8 @@ Relative and absolute positioning allows you to have overlapping elements and re
 
 ## React
 
-Interesting things I have learned about React
+#### *Interesting things I have learned about React*
+
+React components can be split into smaller child components, which makes larger views easier to organize and reuse.
+
+You can use consol logs or the source tab in Chrome DevTools to check variables and debug your application
