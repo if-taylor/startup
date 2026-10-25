@@ -39,6 +39,15 @@ export function Dashboard() {
 
     const [weather, setWeather] = React.useState(null);
 
+    const [friendUpdates, setFriendUpdates] = React.useState([
+        {
+            id: crypto.randomUUID(),
+            user: 'Alex',
+            goal: 'Run a 5K',
+            progress: 62,
+        },
+    ]);
+
     React.useEffect(() => {
         localStorage.setItem(
             'habitCompletions',
@@ -52,6 +61,42 @@ export function Dashboard() {
 
     React.useEffect(() => {
         setWeather(getWeather());
+    }, []);
+
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            // Mock WebSocket update
+            const mockUpdates = [
+                {
+                    user: 'Alex',
+                    goal: 'Run a 5K',
+                    progress: Math.floor(Math.random() * 101),
+                },
+                {
+                    user: 'Jordan',
+                    goal: 'Read 20 Books',
+                    progress: Math.floor(Math.random() * 101),
+                },
+                {
+                    user: 'Sam',
+                    goal: 'Learn Guitar',
+                    progress: Math.floor(Math.random() * 101),
+                },
+            ];
+
+            const randomUpdate =
+                mockUpdates[Math.floor(Math.random() * mockUpdates.length)];
+
+            setFriendUpdates((previousUpdates) => [
+                {
+                    id: crypto.randomUUID(),
+                    ...randomUpdate,
+                },
+                ...previousUpdates,
+            ].slice(0, 5));
+        }, 30000);
+
+        return () => clearInterval(interval);
     }, []);
 
     function getDateKey(date = new Date()) {
@@ -234,7 +279,7 @@ export function Dashboard() {
         return {
             temperature: 68,
             condition: 'Partly cloudy',
-            location: 'Salt Lake City',
+            location: 'Viridian City',
         };
     }
 
@@ -377,17 +422,13 @@ export function Dashboard() {
                 <h2 className="fw-light fs-4">My Friends' Goals</h2>
                 {/* Shared progress will eventually update in real time through WebSockets. */}
                 <ul className="friends-goals">
-                    <li>
-                        <h3>Run a 5K</h3>
-                        <p>Shared by Alex</p>
-                        <p>Progress: 62%</p>
-                    </li>
-
-                    <li>
-                        <h3>Read Every Day</h3>
-                        <p>Shared by Alex</p>
-                        <p>Current streak: 12 days</p>
-                    </li>
+                    {friendUpdates.map((update) => (
+                        <li key={update.id}>
+                            <h3>{update.goal}</h3>
+                            <p>Shared by {update.user}</p>
+                            <p>Progress: {update.progress}%</p>
+                        </li>
+                    ))}
                 </ul>
             </section>
         </main>
