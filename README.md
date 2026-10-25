@@ -136,9 +136,9 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **All functionality implemented or mocked out** - I did not complete this part of the deliverable.
-- [ ] **Hooks** - I did not complete this part of the deliverable.
+- [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
+- [x] **All functionality implemented or mocked out** - I implemented the main functionality for goals, habits, scheduling, dashboard updates, and mock login. I used localStorage to persist user-specific data, hard-coded weather data to simulate using a third-party API, and setInterval to simulate WebSocket-style friend/accountability updates.
+- [x] **Hooks** - I used React useState hook to manage interactive component state and useEffect hook for lifecycle behavior such as saving data to localStorage, loading mock weather data, and running/cleaning up simulated real-time updates.
 
 ## 🚀 Service deliverable
 
