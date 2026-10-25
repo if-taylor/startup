@@ -4,7 +4,7 @@ import { Modal, Form, Button } from 'react-bootstrap';
 export function Schedule({ userName }) {
 
     const [events, setEvents] = React.useState(() => {
-        const savedEvents = localStorage.getItem('events');
+        const savedEvents = localStorage.getItem(`events-${userName}`)
 
         if (savedEvents) {
             return JSON.parse(savedEvents);
@@ -28,7 +28,7 @@ export function Schedule({ userName }) {
     const hourHeight = 60;
 
     React.useEffect(() => {
-        localStorage.setItem('events', JSON.stringify(events));
+        localStorage.setItem(`events-${userName}`, JSON.stringify(events));
     }, [events]);
 
     function changeDay(amount) {

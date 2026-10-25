@@ -2,22 +2,22 @@ import React from 'react';
 
 export function Dashboard({ userName }) {
     const [habits, setHabits] = React.useState(() => {
-        const savedHabits = localStorage.getItem('habits');
+        const savedHabits = localStorage.getItem(`habits-${userName}`)
         return savedHabits ? JSON.parse(savedHabits) : [];
     });
 
     const [goals, setGoals] = React.useState(() => {
-        const savedGoals = localStorage.getItem('goals');
+        const savedGoals = localStorage.getItem(`goals-${userName}`)
         return savedGoals ? JSON.parse(savedGoals) : [];
     });
 
     const [events, setEvents] = React.useState(() => {
-        const savedEvents = localStorage.getItem('events');
+        const savedEvents = localStorage.getItem(`events-${userName}`)
         return savedEvents ? JSON.parse(savedEvents) : [];
     });
 
     const [habitCompletions, setHabitCompletions] = React.useState(() => {
-        const savedCompletions = localStorage.getItem('habitCompletions');
+        const savedCompletions = localStorage.getItem(`habitCompletions-${userName}`)
         return savedCompletions ? JSON.parse(savedCompletions) : {};
     });
 
@@ -50,7 +50,7 @@ export function Dashboard({ userName }) {
 
     React.useEffect(() => {
         localStorage.setItem(
-            'habitCompletions',
+            `habitCompletions-${userName}`,
             JSON.stringify(habitCompletions)
         );
     }, [habitCompletions]);

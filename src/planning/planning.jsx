@@ -3,7 +3,7 @@ import { Button, Modal, Form } from 'react-bootstrap';
 
 export function Planning({ userName }) {
     const [habits, setHabits] = React.useState(() => {
-        const savedHabits = localStorage.getItem('habits');
+        const savedHabits = localStorage.getItem(`habits-${userName}`)
 
         if (savedHabits) {
             return JSON.parse(savedHabits);
@@ -13,7 +13,7 @@ export function Planning({ userName }) {
     });
 
     const [goals, setGoals] = React.useState(() => {
-        const savedGoals = localStorage.getItem('goals');
+        const savedGoals = localStorage.getItem(`goals-${userName}`)
 
         if (savedGoals) {
             return JSON.parse(savedGoals);
@@ -37,11 +37,11 @@ export function Planning({ userName }) {
     const [goalCompletedDate, setGoalCompletedDate] = React.useState(null);
 
     React.useEffect(() => {
-        localStorage.setItem('habits', JSON.stringify(habits));
+        localStorage.setItem(`habits-${userName}`, JSON.stringify(habits));
     }, [habits]);
 
     React.useEffect(() => {
-        localStorage.setItem('goals', JSON.stringify(goals));
+        localStorage.setItem(`goals-${userName}`, JSON.stringify(goals));
     }, [goals]);
 
     function saveHabit() {
