@@ -56,8 +56,8 @@ export function Dashboard({ userName }) {
     }, [habitCompletions]);
 
     React.useEffect(() => {
-        localStorage.setItem('goals', JSON.stringify(goals));
-    }, [goals]);
+        localStorage.setItem(`goals-${userName}`, JSON.stringify(goals));
+    }, [goals, userName]);
 
     React.useEffect(() => {
         setWeather(getWeather());
