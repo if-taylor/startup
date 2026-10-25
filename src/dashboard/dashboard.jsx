@@ -37,12 +37,22 @@ export function Dashboard() {
         })
         .slice(0, 3);
 
+    const [weather, setWeather] = React.useState(null);
+
     React.useEffect(() => {
         localStorage.setItem(
             'habitCompletions',
             JSON.stringify(habitCompletions)
         );
     }, [habitCompletions]);
+
+    React.useEffect(() => {
+        localStorage.setItem('goals', JSON.stringify(goals));
+    }, [goals]);
+
+    React.useEffect(() => {
+        setWeather(getWeather());
+    }, []);
 
     function getDateKey(date = new Date()) {
         const year = date.getFullYear();
@@ -160,6 +170,74 @@ export function Dashboard() {
             goal.tasks.every((task) => task.completed);
     }
 
+    function toggleGoalTask(goalId, taskId) {
+        const goal = goals.find((goal) => goal.id === goalId);
+
+        if (!goal) {
+            return;
+        }
+
+        const wasComplete = isGoalComplete(goal);
+
+        const updatedTasks = goal.tasks.map((task) =>
+            task.id === taskId
+                ? { ...task, completed: !task.completed }
+                : task
+        );
+
+        const updatedGoal = {
+            ...goal,
+            tasks: updatedTasks,
+        };
+
+        const willBeComplete = isGoalComplete(updatedGoal);
+
+        if (!wasComplete && willBeComplete) {
+            const confirmed = window.confirm(
+                'Completing this task will finish the goal and move it to Past Goals. Continue?'
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            updatedGoal.completedDate = new Date().toLocaleDateString();
+        }
+
+        if (wasComplete && !willBeComplete) {
+            const confirmed = window.confirm(
+                'This will mark the goal as unfinished and move it back to your current Goals. Continue?'
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            updatedGoal.completedDate = null;
+        }
+
+        setGoals(
+            goals.map((currentGoal) =>
+                currentGoal.id === goalId
+                    ? updatedGoal
+                    : currentGoal
+            )
+        );
+    }
+
+    function getNextTask(goal) {
+        return goal.tasks.find((task) => !task.completed);
+    }
+
+    function getWeather() {
+        // This will be replaced with a third-party weather service call.
+        return {
+            temperature: 68,
+            condition: 'Partly cloudy',
+            location: 'Salt Lake City',
+        };
+    }
+
     return (
         <main className="container mt-4">
             {/* User name will come from authentication */}
@@ -225,23 +303,40 @@ export function Dashboard() {
                         <tr>
                             <th>Goal</th>
                             <th>Progress</th>
+                            <th>Next Task</th>
                         </tr>
                     </thead>
                     <tbody>
                         {goals
                             .filter((goal) => !isGoalComplete(goal))
-                            .map((goal) => (
-                                <tr key={goal.id}>
-                                    <td>{goal.name}</td>
-                                    <td>{getGoalProgress(goal)}%</td>
-                                </tr>
-                            ))}
+                            .map((goal) => {
+                                const nextTask = getNextTask(goal);
 
-                        {goals.filter((goal) => !isGoalComplete(goal)).length === 0 && (
-                            <tr>
-                                <td colSpan="2">No current goals</td>
-                            </tr>
-                        )}
+                                return (
+                                    <tr key={goal.id}>
+                                        <td>{goal.name}</td>
+
+                                        <td>{getGoalProgress(goal)}%</td>
+
+                                        <td>
+                                            {nextTask && (
+                                                <label>
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={nextTask.completed}
+                                                        onChange={() =>
+                                                            toggleGoalTask(goal.id, nextTask.id)
+                                                        }
+                                                    />
+
+                                                    {' '}
+                                                    {nextTask.name}
+                                                </label>
+                                            )}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                     </tbody>
                 </table>
 
@@ -269,7 +364,13 @@ export function Dashboard() {
             {/* Weather information from a third-party service */}
             <section className="weather-section p-4 mb-4">
                 <h3 className="fw-light fs-4">Current Weather</h3>
-                <p>Weather information will be displayed here.</p>
+                {weather && (
+                    <>
+                        <p>{weather.location}</p>
+                        <p>{weather.temperature}°F</p>
+                        <p>{weather.condition}</p>
+                    </>
+                )}
             </section>
 
             <section className="p-4 mb-4">
