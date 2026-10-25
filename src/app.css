@@ -233,8 +233,6 @@ footer p {
 }
 
 .schedule-timeline {
-    display: flex;
-    flex-direction: column;
     position: relative;
     height: 73vh;
     min-height: 300px;
@@ -246,14 +244,20 @@ footer p {
     border-radius: 0.4rem;
 }
 
+.timeline-hours {
+    position: relative;
+}
+
 .timeline-hour {
     display: flex;
     align-items: center;
-    min-height: 70px;
+    height: 60px;
+    min-height: 60px;
 }
 
 .timeline-hour time {
     width: 75px;
+    flex-shrink: 0;
     font-size: 0.85rem;
     color: #6c757d;
 }
@@ -264,26 +268,29 @@ footer p {
     border-top: 1px solid #dee2e6;
 }
 
+.timeline-events {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1440px;
+    pointer-events: none;
+}
+
 .timeline-event {
     position: absolute;
     left: 105px;
     right: 0;
-    height: 4rem;
     padding: 0.75rem 1rem;
     margin-right: 2.25rem;
     background-color: rgb(230, 252, 255);
+    border: none;
     border-left: 4px solid #0d6efd;
     border-radius: 0.4rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.timeline-event:nth-child(1){
-    top: 33rem;
-}
-
-.timeline-event:nth-child(2){
-    top: 48rem;
-    height: 6.5rem;
+    text-align: left;
+    pointer-events: auto;
+    cursor: pointer;
 }
 
 

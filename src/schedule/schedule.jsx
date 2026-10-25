@@ -25,6 +25,8 @@ export function Schedule() {
     const [eventStartTime, setEventStartTime] = React.useState('');
     const [eventEndTime, setEventEndTime] = React.useState('');
 
+    const hourHeight = 60;
+
     React.useEffect(() => {
         localStorage.setItem('events', JSON.stringify(events));
     }, [events]);
@@ -120,6 +122,11 @@ export function Schedule() {
         closeEventModal();
     }
 
+    function timeToMinutes(time) {
+        const [hours, minutes] = time.split(':').map(Number);
+        return hours * 60 + minutes;
+    }
+
     return (
         <main className="container mt-4">
 
@@ -153,21 +160,35 @@ export function Schedule() {
                     </div>
 
                     {/* Schedule events will eventually be loaded from the database for the current user. */}
-                    {events
-                        .filter((event) => event.date === selectedDate)
-                        .sort((a, b) => a.startTime.localeCompare(b.startTime))
-                        .map((event) => (
-                            <button
-                                key={event.id}
-                                className="timeline-event"
-                                onClick={() => openEventModal(event)}
-                            >
-                                <strong>{event.name}</strong>
-                                <span>
-                                    {event.startTime} – {event.endTime}
-                                </span>
-                            </button>
-                        ))}
+                    <div className="timeline-events">
+                        {events
+                            .filter((event) => event.date === selectedDate)
+                            .sort((a, b) => a.startTime.localeCompare(b.startTime))
+                            .map((event) => {
+                                const startMinutes = timeToMinutes(event.startTime);
+                                const endMinutes = timeToMinutes(event.endTime);
+
+                                const top = (startMinutes / 60) * hourHeight;
+                                const height = ((endMinutes - startMinutes) / 60) * hourHeight;
+
+                                return (
+                                    <button
+                                        key={event.id}
+                                        className="timeline-event"
+                                        onClick={() => openEventModal(event)}
+                                        style={{
+                                            top: `${top}px`,
+                                            height: `${height}px`,
+                                        }}
+                                    >
+                                        <strong>{event.name}</strong>
+                                        <span>
+                                            {event.startTime} – {event.endTime}
+                                        </span>
+                                    </button>
+                                );
+                            })}
+                    </div>
                 </section>
 
                 {/* Add more events */}
