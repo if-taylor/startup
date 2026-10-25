@@ -17,12 +17,13 @@ export function Planning() {
     const [frequencyType, setFrequencyType] = React.useState('everyDay');
     const [selectedDays, setSelectedDays] = React.useState([]);
     const [timesPerWeek, setTimesPerWeek] = React.useState(3);
+    const [editingHabitId, setEditingHabitId] = React.useState(null);
 
     React.useEffect(() => {
         localStorage.setItem('habits', JSON.stringify(habits));
     }, [habits]);
     
-    function addHabit() {
+    function saveHabit() {
         if (!newHabitName) {
             return;
         }
@@ -49,19 +50,43 @@ export function Planning() {
             };
         }
 
-        const newHabit = {
-            id: Date.now(),
-            name: newHabitName,
-            frequency: frequency,
-        };
+        if (editingHabitId !== null) {
+            setHabits(
+                habits.map((habit) =>
+                    habit.id === editingHabitId
+                        ? {
+                            ...habit,
+                            name: newHabitName,
+                            frequency: frequency,
+                        }
+                        : habit
+                )
+            );
+        } else {
+            const newHabit = {
+                id: Date.now(),
+                name: newHabitName,
+                frequency: frequency,
+            };
 
-        setHabits([...habits, newHabit]);
+            setHabits([...habits, newHabit]);
+        }
 
+        closeHabitModal();
+    }
+
+    function deleteHabit() {
+        setHabits(habits.filter((habit) => habit.id !== editingHabitId));
+        closeHabitModal();
+    }
+
+    function closeHabitModal() {
+        setShowHabitModal(false);
+        setEditingHabitId(null);
         setNewHabitName('');
         setFrequencyType('everyDay');
         setSelectedDays([]);
         setTimesPerWeek(3);
-        setShowHabitModal(false);
     }
 
     function toggleDay(day) {
@@ -97,7 +122,28 @@ export function Planning() {
                     <ul>
                         {habits.map((habit) => (
                             <li key={habit.id}>
-                                <button className="habit-item">
+                                <button
+                                    className="habit-item"
+                                    onClick={() => {
+                                        setEditingHabitId(habit.id);
+                                        setNewHabitName(habit.name);
+                                        setFrequencyType(habit.frequency.type);
+
+                                        if (habit.frequency.type === 'specificDays') {
+                                            setSelectedDays(habit.frequency.days);
+                                        } else {
+                                            setSelectedDays([]);
+                                        }
+
+                                        if (habit.frequency.type === 'timesPerWeek') {
+                                            setTimesPerWeek(habit.frequency.count);
+                                        } else {
+                                            setTimesPerWeek(3);
+                                        }
+
+                                        setShowHabitModal(true);
+                                    }}
+                                >
                                     <div className="item-header">
                                         <h3>{habit.name}</h3>
                                         <span>{getFrequencyText(habit.frequency)}</span>
@@ -106,7 +152,16 @@ export function Planning() {
                             </li>
                         ))}
                     </ul>
-                    <Button onClick={() => setShowHabitModal(true)}>
+                    <Button
+                        onClick={() => {
+                            setEditingHabitId(null);
+                            setNewHabitName('');
+                            setFrequencyType('everyDay');
+                            setSelectedDays([]);
+                            setTimesPerWeek(3);
+                            setShowHabitModal(true);
+                        }}
+                    >
                         New Habit
                     </Button>
                 </section>
@@ -200,10 +255,10 @@ export function Planning() {
                 </section>
             </section>
 
-            <Modal show={showHabitModal} onHide={() => setShowHabitModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>New Habit</Modal.Title>
-                </Modal.Header>
+            <Modal show={showHabitModal} onHide={closeHabitModal}>
+                <Modal.Title>
+                    {editingHabitId !== null ? 'Edit Habit' : 'New Habit'}
+                </Modal.Title>
 
                 <Modal.Body>
                     <Form.Group className="mb-3">
@@ -279,12 +334,18 @@ export function Planning() {
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowHabitModal(false)}>
+                    {editingHabitId !== null && (
+                        <Button variant="danger" onClick={deleteHabit}>
+                            Delete Habit
+                        </Button>
+                    )}
+
+                    <Button variant="secondary" onClick={closeHabitModal}>
                         Cancel
                     </Button>
 
-                    <Button variant="primary" onClick={addHabit}>
-                        Add Habit
+                    <Button variant="primary" onClick={saveHabit}>
+                        {editingHabitId !== null ? 'Save Changes' : 'Add Habit'}
                     </Button>
                 </Modal.Footer>
             </Modal>
