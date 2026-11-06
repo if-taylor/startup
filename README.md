@@ -144,14 +144,14 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **Node.js/Express HTTP service** - I did not complete this part of the deliverable.
-- [ ] **Static middleware for frontend** - I did not complete this part of the deliverable.
-- [ ] **Calls to third party endpoints** - I did not complete this part of the deliverable.
-- [ ] **Backend service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Frontend calls service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Supports registration, login, logout, and restricted endpoint** - I did not complete this part of the deliverable.
-- [ ] **Uses BCrypt to hash passwords** - I did not complete this part of the deliverable.
+- [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
+- [x] **Node.js/Express HTTP service** - Created a backend service using Node.js and Express, running on port 4000.
+- [x] **Static middleware for frontend** - Used Express static middleware to serve the React frontend files in production.
+- [x] **Calls to third party endpoints** - Integrated the Open-Meteo weather API to display current weather information on the dashboard.
+- [x] **Backend service endpoints** - Created API endpoints for managing goals, habits, habit completions, schedule events, and user authentication.
+- [x] **Frontend calls service endpoints** - Used `fetch()` requests in React to retrieve, create, update, and delete data through the backend.
+- [x] **Supports registration, login, logout, and restricted endpoint** - Implemented authentication endpoints using HTTP-only cookies and protected application endpoints with authentication middleware.
+- [x] **Uses BCrypt to hash passwords** - Used `bcryptjs` to hash passwords during registration and verify them during login.
 
 ## 🚀 DB deliverable
 
