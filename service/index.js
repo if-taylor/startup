@@ -423,6 +423,92 @@ apiRouter.post('/habits/completions', requireAuth, (req, res) => {
 
 
 
+//
+// GET /api/events - Retrieve user's events
+//
+apiRouter.get('/events', requireAuth, (req, res) => {
+    res.send(events.filter(
+        (event) => event.owner === req.user.email
+    ));
+});
+
+//
+// POST /api/events - Create an event
+//
+apiRouter.post('/events', requireAuth, (req, res) => {
+    const { name, date, startTime, endTime } = req.body;
+
+    if (typeof name !== 'string' || !name.trim() ||
+        typeof date !== 'string' ||
+        typeof startTime !== 'string' ||
+        typeof endTime !== 'string' ||
+        !date || !startTime || !endTime ||
+        endTime <= startTime) {
+        return res.status(400).send({ message: 'Invalid event data' });
+    }
+
+    const event = {
+        id: randomUUID(),
+        owner: req.user.email,
+        name: name.trim(),
+        date,
+        startTime,
+        endTime,
+    };
+
+    events.push(event);
+    res.status(201).send(event);
+});
+
+//
+// PUT /api/events/:id - Update an event
+//
+apiRouter.put('/events/:id', requireAuth, (req, res) => {
+    const event = events.find(
+        (event) => event.id === req.params.id &&
+            event.owner === req.user.email
+    );
+
+    if (!event) {
+        return res.status(404).send({ message: 'Event not found' });
+    }
+
+    const { name, date, startTime, endTime } = req.body;
+
+    if (typeof name !== 'string' || !name.trim() ||
+        typeof date !== 'string' ||
+        typeof startTime !== 'string' ||
+        typeof endTime !== 'string' ||
+        !date || !startTime || !endTime ||
+        endTime <= startTime) {
+        return res.status(400).send({ message: 'Invalid event data' });
+    }
+
+    event.name = name.trim();
+    event.date = date;
+    event.startTime = startTime;
+    event.endTime = endTime;
+
+    res.send(event);
+});
+
+//
+// DELETE /api/events/:id - Delete an event
+//
+apiRouter.delete('/events/:id', requireAuth, (req, res) => {
+    const index = events.findIndex(
+        (event) => event.id === req.params.id &&
+            event.owner === req.user.email
+    );
+
+    if (index === -1) {
+        return res.status(404).send({ message: 'Event not found' });
+    }
+
+    events.splice(index, 1);
+    res.status(204).end();
+});
+
 
 app.listen(port, () => {
     console.log(`LiveMyGospel service listening on port ${port}`);

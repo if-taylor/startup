@@ -7,10 +7,7 @@ export function Dashboard({ userName }) {
     const [goals, setGoals] = React.useState([]);
     const [goalError, setGoalError] = React.useState('');
 
-    const [events, setEvents] = React.useState(() => {
-        const savedEvents = localStorage.getItem(`events-${userName}`)
-        return savedEvents ? JSON.parse(savedEvents) : [];
-    });
+    const [events, setEvents] = React.useState([]);
 
     const [habitCompletions, setHabitCompletions] = React.useState({});
     const [completionsLoading, setCompletionsLoading] = React.useState(true);
@@ -144,6 +141,34 @@ export function Dashboard({ userName }) {
     React.useEffect(() => {
         setWeather(getWeather());
     }, []);
+
+    React.useEffect(() => {
+        let cancelled = false;
+
+        async function loadEvents() {
+            try {
+                const response = await fetch('/api/events');
+
+                if (!response.ok) {
+                    throw new Error('Failed to load events');
+                }
+
+                const data = await response.json();
+
+                if (!cancelled) {
+                    setEvents(data);
+                }
+            } catch (error) {
+                console.error('Failed to load events:', error);
+            }
+        }
+
+        loadEvents();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [userName]);
 
     React.useEffect(() => {
         const interval = setInterval(() => {

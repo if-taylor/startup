@@ -3,15 +3,8 @@ import { Modal, Form, Button } from 'react-bootstrap';
 
 export function Schedule({ userName }) {
 
-    const [events, setEvents] = React.useState(() => {
-        const savedEvents = localStorage.getItem(`events-${userName}`)
-
-        if (savedEvents) {
-            return JSON.parse(savedEvents);
-        }
-
-        return [];
-    });
+    const [events, setEvents] = React.useState([]);
+    const [eventError, setEventError] = React.useState('');
 
     const [selectedDate, setSelectedDate] = React.useState(() => {
         return new Date().toISOString().split('T')[0];
@@ -28,8 +21,35 @@ export function Schedule({ userName }) {
     const hourHeight = 60;
 
     React.useEffect(() => {
-        localStorage.setItem(`events-${userName}`, JSON.stringify(events));
-    }, [events]);
+        let cancelled = false;
+
+        async function loadEvents() {
+            try {
+                const response = await fetch('/api/events');
+
+                if (!response.ok) {
+                    throw new Error('Failed to load events');
+                }
+
+                const data = await response.json();
+
+                if (!cancelled) {
+                    setEvents(data);
+                    setEventError('');
+                }
+            } catch (error) {
+                if (!cancelled) {
+                    setEventError(error.message);
+                }
+            }
+        }
+
+        loadEvents();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [userName]);
 
     function changeDay(amount) {
         const date = new Date(`${selectedDate}T12:00:00`);
@@ -79,47 +99,78 @@ export function Schedule({ userName }) {
         setEventEndTime('');
     }
 
-    function saveEvent() {
-        if (!eventName.trim() || !eventDate || !eventStartTime || !eventEndTime) {
+
+    async function saveEvent() {
+        if (!eventName.trim() || !eventDate ||
+            !eventStartTime || !eventEndTime) {
             return;
         }
 
         if (eventEndTime <= eventStartTime) {
+            setEventError('End time must be after start time.');
             return;
         }
 
-        if (editingEventId !== null) {
-            setEvents(
-                events.map((event) =>
-                    event.id === editingEventId
-                        ? {
-                            ...event,
-                            name: eventName.trim(),
-                            date: eventDate,
-                            startTime: eventStartTime,
-                            endTime: eventEndTime,
-                        }
-                        : event
-                )
+        const editing = editingEventId !== null;
+
+        const endpoint = editing
+            ? `/api/events/${editingEventId}`
+            : '/api/events';
+
+        try {
+            setEventError('');
+
+            const response = await fetch(endpoint, {
+                method: editing ? 'PUT' : 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: eventName.trim(),
+                    date: eventDate,
+                    startTime: eventStartTime,
+                    endTime: eventEndTime,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save event');
+            }
+
+            const savedEvent = await response.json();
+
+            setEvents((previousEvents) =>
+                editing
+                    ? previousEvents.map((event) =>
+                        event.id === savedEvent.id ? savedEvent : event
+                    )
+                    : [...previousEvents, savedEvent]
             );
-        } else {
-            const newEvent = {
-                id: crypto.randomUUID(),
-                name: eventName.trim(),
-                date: eventDate,
-                startTime: eventStartTime,
-                endTime: eventEndTime,
-            };
 
-            setEvents([...events, newEvent]);
+            closeEventModal();
+        } catch (error) {
+            setEventError(error.message);
         }
-
-        closeEventModal();
     }
 
-    function deleteEvent() {
-        setEvents(events.filter((event) => event.id !== editingEventId));
-        closeEventModal();
+    async function deleteEvent() {
+        try {
+            setEventError('');
+
+            const response = await fetch(`/api/events/${editingEventId}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete event');
+            }
+
+            setEvents((previousEvents) =>
+                previousEvents.filter((event) => event.id !== editingEventId)
+            );
+
+            closeEventModal();
+        } catch (error) {
+            setEventError(error.message);
+        }
     }
 
     function timeToMinutes(time) {
@@ -141,6 +192,9 @@ export function Schedule({ userName }) {
 
             <section className="schedule">
                 <h3 className="page-heading">Schedule</h3>
+                {eventError && (
+                    <p role="alert" className="text-danger">{eventError}</p>
+                )}
                 <h2>{formatSelectedDate()}</h2>
                 <section className="schedule-navigation">
                     <button onClick={() => changeDay(-1)}>← Previous Day</button>
