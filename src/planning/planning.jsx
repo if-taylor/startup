@@ -12,15 +12,9 @@ export function Planning({ userName }) {
         return [];
     });
 
-    const [goals, setGoals] = React.useState(() => {
-        const savedGoals = localStorage.getItem(`goals-${userName}`)
-
-        if (savedGoals) {
-            return JSON.parse(savedGoals);
-        }
-
-        return [];
-    });
+    const [goals, setGoals] = React.useState([]);
+    const [goalsLoading, setGoalsLoading] = React.useState(true);
+    const [goalError, setGoalError] = React.useState('');
 
     const [showHabitModal, setShowHabitModal] = React.useState(false);
     const [newHabitName, setNewHabitName] = React.useState('');
@@ -41,8 +35,41 @@ export function Planning({ userName }) {
     }, [habits]);
 
     React.useEffect(() => {
-        localStorage.setItem(`goals-${userName}`, JSON.stringify(goals));
-    }, [goals]);
+        let cancelled = false;
+
+        async function loadGoals() {
+            setGoalsLoading(true);
+            setGoalError('');
+
+            try {
+                const response = await fetch('/api/goals');
+
+                if (!response.ok) {
+                    throw new Error('Failed to load goals');
+                }
+
+                const data = await response.json();
+
+                if (!cancelled) {
+                    setGoals(data);
+                }
+            } catch (error) {
+                if (!cancelled) {
+                    setGoalError(error.message);
+                }
+            } finally {
+                if (!cancelled) {
+                    setGoalsLoading(false);
+                }
+            }
+        }
+
+        loadGoals();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [userName]);
 
     function saveHabit() {
         if (!newHabitName) {
@@ -268,7 +295,8 @@ export function Planning({ userName }) {
         updateGoalTasks(updatedTasks);
     }
 
-    function saveGoal() {
+
+    async function saveGoal() {
         if (!goalName.trim()) {
             return;
         }
@@ -290,42 +318,82 @@ export function Planning({ userName }) {
             ? goalCompletedDate || new Date().toLocaleDateString()
             : null;
 
-        if (editingGoalId !== null) {
-            setGoals(
-                goals.map((goal) =>
-                    goal.id === editingGoalId
-                        ? {
-                            ...goal,
-                            name: goalName.trim(),
-                            dueDate: goalDueDate,
-                            tasks: finalTasks,
-                            completedDate: finalCompletedDate,
-                        }
-                        : goal
-                )
-            );
-        } else {
-            const newGoal = {
-                id: crypto.randomUUID(),
-                name: goalName.trim(),
-                dueDate: goalDueDate,
-                tasks: finalTasks,
-                completedDate: finalCompletedDate,
-            };
+        const goalData = {
+            name: goalName.trim(),
+            dueDate: goalDueDate,
+            tasks: finalTasks,
+            completedDate: finalCompletedDate,
+        };
 
-            setGoals([...goals, newGoal]);
+        const editing = editingGoalId !== null;
+
+        const endpoint = editing
+            ? `/api/goals/${editingGoalId}`
+            : '/api/goals';
+
+        try {
+            setGoalError('');
+
+            const response = await fetch(endpoint, {
+                method: editing ? 'PUT' : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(goalData),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save goal');
+            }
+
+            const savedGoal = await response.json();
+
+            if (editing) {
+                setGoals((previousGoals) =>
+                    previousGoals.map((goal) =>
+                        goal.id === savedGoal.id ? savedGoal : goal
+                    )
+                );
+            } else {
+                setGoals((previousGoals) => [
+                    ...previousGoals,
+                    savedGoal,
+                ]);
+            }
+
+            closeGoalModal();
+        } catch (error) {
+            setGoalError(error.message);
         }
-
-        closeGoalModal();
     }
 
-    function deleteGoal() {
-        setGoals(goals.filter((goal) => goal.id !== editingGoalId));
-        closeGoalModal();
+
+    async function deleteGoal() {
+        try {
+            setGoalError('');
+
+            const response = await fetch(`/api/goals/${editingGoalId}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete goal');
+            }
+
+            setGoals((previousGoals) =>
+                previousGoals.filter((goal) => goal.id !== editingGoalId)
+            );
+
+            closeGoalModal();
+        } catch (error) {
+            setGoalError(error.message);
+        }
     }
 
     return (
         <main className="container mt-4">
+            {goalsLoading && <p>Loading goals...</p>}
+            {goalError && <p role="alert" className="text-danger">{goalError}</p>}
             {/* User goals and habits will eventually be loaded from a database. */}
             <section className="planning">
                 <section className="planning-section">
@@ -411,7 +479,7 @@ export function Planning({ userName }) {
                             })}
                     </ul>
 
-                    <button onClick={openNewGoalModal}>
+                    <button onClick={openNewGoalModal} disabled={goalsLoading}>
                         New Goal
                     </button>
                 </section>

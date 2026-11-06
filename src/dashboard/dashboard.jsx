@@ -6,10 +6,8 @@ export function Dashboard({ userName }) {
         return savedHabits ? JSON.parse(savedHabits) : [];
     });
 
-    const [goals, setGoals] = React.useState(() => {
-        const savedGoals = localStorage.getItem(`goals-${userName}`)
-        return savedGoals ? JSON.parse(savedGoals) : [];
-    });
+    const [goals, setGoals] = React.useState([]);
+    const [goalError, setGoalError] = React.useState('');
 
     const [events, setEvents] = React.useState(() => {
         const savedEvents = localStorage.getItem(`events-${userName}`)
@@ -56,8 +54,35 @@ export function Dashboard({ userName }) {
     }, [habitCompletions]);
 
     React.useEffect(() => {
-        localStorage.setItem(`goals-${userName}`, JSON.stringify(goals));
-    }, [goals, userName]);
+        let cancelled = false;
+
+        async function loadGoals() {
+            try {
+                const response = await fetch('/api/goals');
+
+                if (!response.ok) {
+                    throw new Error('Failed to load goals');
+                }
+
+                const data = await response.json();
+
+                if (!cancelled) {
+                    setGoals(data);
+                    setGoalError('');
+                }
+            } catch (error) {
+                if (!cancelled) {
+                    setGoalError(error.message);
+                }
+            }
+        }
+
+        loadGoals();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [userName]);
 
     React.useEffect(() => {
         setWeather(getWeather());
@@ -215,7 +240,8 @@ export function Dashboard({ userName }) {
             goal.tasks.every((task) => task.completed);
     }
 
-    function toggleGoalTask(goalId, taskId) {
+
+    async function toggleGoalTask(goalId, taskId) {
         const goal = goals.find((goal) => goal.id === goalId);
 
         if (!goal) {
@@ -261,13 +287,34 @@ export function Dashboard({ userName }) {
             updatedGoal.completedDate = null;
         }
 
-        setGoals(
-            goals.map((currentGoal) =>
-                currentGoal.id === goalId
-                    ? updatedGoal
-                    : currentGoal
-            )
-        );
+        try {
+            setGoalError('');
+
+            const response = await fetch(`/api/goals/${goalId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    tasks: updatedGoal.tasks,
+                    completedDate: updatedGoal.completedDate,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update goal');
+            }
+
+            const savedGoal = await response.json();
+
+            setGoals((previousGoals) =>
+                previousGoals.map((currentGoal) =>
+                    currentGoal.id === goalId ? savedGoal : currentGoal
+                )
+            );
+        } catch (error) {
+            setGoalError(error.message);
+        }
     }
 
     function getNextTask(goal) {
@@ -343,6 +390,7 @@ export function Dashboard({ userName }) {
             {/* Goals overview */}
             <section className="p-4 mb-4">
                 <h2 className="fw-light fs-4">Your Goals</h2>
+                {goalError && <p role="alert" className="text-danger">{goalError}</p>}
 
                 {/* Goals will eventually be loaded from the database for the current user. */}
                 <table className="goals-table">
