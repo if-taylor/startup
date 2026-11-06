@@ -2,15 +2,8 @@ import React from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 
 export function Planning({ userName }) {
-    const [habits, setHabits] = React.useState(() => {
-        const savedHabits = localStorage.getItem(`habits-${userName}`)
-
-        if (savedHabits) {
-            return JSON.parse(savedHabits);
-        }
-
-        return [];
-    });
+    const [habits, setHabits] = React.useState([]);
+    const [habitError, setHabitError] = React.useState('');
 
     const [goals, setGoals] = React.useState([]);
     const [goalsLoading, setGoalsLoading] = React.useState(true);
@@ -31,8 +24,34 @@ export function Planning({ userName }) {
     const [goalCompletedDate, setGoalCompletedDate] = React.useState(null);
 
     React.useEffect(() => {
-        localStorage.setItem(`habits-${userName}`, JSON.stringify(habits));
-    }, [habits]);
+        let cancelled = false;
+
+        async function loadHabits() {
+            try {
+                const response = await fetch('/api/habits');
+
+                if (!response.ok) {
+                    throw new Error('Failed to load habits');
+                }
+
+                const data = await response.json();
+
+                if (!cancelled) {
+                    setHabits(data);
+                }
+            } catch (error) {
+                if (!cancelled) {
+                    setHabitError(error.message);
+                }
+            }
+        }
+
+        loadHabits();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [userName]);
 
     React.useEffect(() => {
         let cancelled = false;
@@ -71,17 +90,16 @@ export function Planning({ userName }) {
         };
     }, [userName]);
 
-    function saveHabit() {
-        if (!newHabitName) {
+
+    async function saveHabit() {
+        if (!newHabitName.trim()) {
             return;
         }
 
         let frequency;
 
         if (frequencyType === 'everyDay') {
-            frequency = {
-                type: 'everyDay',
-            };
+            frequency = { type: 'everyDay' };
         } else if (frequencyType === 'specificDays') {
             if (selectedDays.length === 0) {
                 return;
@@ -98,34 +116,72 @@ export function Planning({ userName }) {
             };
         }
 
-        if (editingHabitId !== null) {
-            setHabits(
-                habits.map((habit) =>
-                    habit.id === editingHabitId
-                        ? {
-                            ...habit,
-                            name: newHabitName,
-                            frequency: frequency,
-                        }
-                        : habit
-                )
-            );
-        } else {
-            const newHabit = {
-                id: crypto.randomUUID(),
-                name: newHabitName,
-                frequency: frequency,
-            };
+        const editing = editingHabitId !== null;
 
-            setHabits([...habits, newHabit]);
+        const endpoint = editing
+            ? `/api/habits/${editingHabitId}`
+            : '/api/habits';
+
+        try {
+            setHabitError('');
+
+            const response = await fetch(endpoint, {
+                method: editing ? 'PUT' : 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: newHabitName.trim(),
+                    frequency,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save habit');
+            }
+
+            const savedHabit = await response.json();
+
+            if (editing) {
+                setHabits((previousHabits) =>
+                    previousHabits.map((habit) =>
+                        habit.id === savedHabit.id ? savedHabit : habit
+                    )
+                );
+            } else {
+                setHabits((previousHabits) => [
+                    ...previousHabits,
+                    savedHabit,
+                ]);
+            }
+
+            closeHabitModal();
+        } catch (error) {
+            setHabitError(error.message);
         }
-
-        closeHabitModal();
     }
 
-    function deleteHabit() {
-        setHabits(habits.filter((habit) => habit.id !== editingHabitId));
-        closeHabitModal();
+
+    async function deleteHabit() {
+        try {
+            setHabitError('');
+
+            const response = await fetch(`/api/habits/${editingHabitId}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete habit');
+            }
+
+            setHabits((previousHabits) =>
+                previousHabits.filter((habit) =>
+                    habit.id !== editingHabitId
+                )
+            );
+
+            closeHabitModal();
+        } catch (error) {
+            setHabitError(error.message);
+        }
     }
 
     function closeHabitModal() {
@@ -398,6 +454,7 @@ export function Planning({ userName }) {
             <section className="planning">
                 <section className="planning-section">
                     <h3>Habits</h3>
+                    {habitError && <p role="alert" className="text-danger">{habitError}</p>}
                     <ul>
                         {habits.map((habit) => (
                             <li key={habit.id}>

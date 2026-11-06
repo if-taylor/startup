@@ -1,10 +1,8 @@
 import React from 'react';
 
 export function Dashboard({ userName }) {
-    const [habits, setHabits] = React.useState(() => {
-        const savedHabits = localStorage.getItem(`habits-${userName}`)
-        return savedHabits ? JSON.parse(savedHabits) : [];
-    });
+    const [habits, setHabits] = React.useState([]);
+    const [habitError, setHabitError] = React.useState('');
 
     const [goals, setGoals] = React.useState([]);
     const [goalError, setGoalError] = React.useState('');
@@ -14,10 +12,8 @@ export function Dashboard({ userName }) {
         return savedEvents ? JSON.parse(savedEvents) : [];
     });
 
-    const [habitCompletions, setHabitCompletions] = React.useState(() => {
-        const savedCompletions = localStorage.getItem(`habitCompletions-${userName}`)
-        return savedCompletions ? JSON.parse(savedCompletions) : {};
-    });
+    const [habitCompletions, setHabitCompletions] = React.useState({});
+    const [completionsLoading, setCompletionsLoading] = React.useState(true);
 
     const upcomingEvents = [...events]
         .filter((event) => {
@@ -47,11 +43,72 @@ export function Dashboard({ userName }) {
     ]);
 
     React.useEffect(() => {
-        localStorage.setItem(
-            `habitCompletions-${userName}`,
-            JSON.stringify(habitCompletions)
-        );
-    }, [habitCompletions]);
+        let cancelled = false;
+
+        async function loadHabits() {
+            try {
+                const response = await fetch('/api/habits');
+
+                if (!response.ok) {
+                    throw new Error('Failed to load habits');
+                }
+
+                const data = await response.json();
+
+                if (!cancelled) {
+                    setHabits(data);
+                    setHabitError('');
+                }
+            } catch (error) {
+                if (!cancelled) {
+                    setHabitError(error.message);
+                }
+            }
+        }
+
+        loadHabits();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [userName]);
+
+    React.useEffect(() => {
+        let cancelled = false;
+
+        async function loadCompletions() {
+            setCompletionsLoading(true);
+
+            try {
+                const response = await fetch('/api/habits/completions');
+
+                if (!response.ok) {
+                    throw new Error('Failed to load habit completions');
+                }
+
+                const data = await response.json();
+
+                if (!cancelled) {
+                    setHabitCompletions(data);
+                    setHabitError('');
+                }
+            } catch (error) {
+                if (!cancelled) {
+                    setHabitError(error.message);
+                }
+            } finally {
+                if (!cancelled) {
+                    setCompletionsLoading(false);
+                }
+            }
+        }
+
+        loadCompletions();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [userName]);
 
     React.useEffect(() => {
         let cancelled = false;
@@ -203,22 +260,47 @@ export function Dashboard({ userName }) {
         return habitCompletions[today]?.includes(habitId) ?? false;
     }
 
-    function toggleHabitCompletion(habitId) {
-        const today = getTodayKey();
-        const completedToday = habitCompletions[today] || [];
-
-        let updated;
-
-        if (completedToday.includes(habitId)) {
-            updated = completedToday.filter((id) => id !== habitId);
-        } else {
-            updated = [...completedToday, habitId];
+    async function toggleHabitCompletion(habitId) {
+        if (completionsLoading) {
+            return;
         }
 
-        setHabitCompletions({
-            ...habitCompletions,
-            [today]: updated,
-        });
+        const today = getTodayKey();
+        const alreadyCompleted = isHabitCompleteToday(habitId);
+
+        try {
+            setHabitError('');
+
+            const response = await fetch('/api/habits/completions', {
+                method: alreadyCompleted ? 'DELETE' : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    habitId,
+                    date: today,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update habit completion');
+            }
+
+            setHabitCompletions((previous) => {
+                const completedToday = previous[today] || [];
+
+                const updated = alreadyCompleted
+                    ? completedToday.filter((id) => id !== habitId)
+                    : [...completedToday, habitId];
+
+                return {
+                    ...previous,
+                    [today]: updated,
+                };
+            });
+        } catch (error) {
+            setHabitError(error.message);
+        }
     }
 
     function getGoalProgress(goal) {
@@ -345,6 +427,8 @@ export function Dashboard({ userName }) {
             {/* Habits on homepage will eventually be loaded from the database for the current user. */}
             <section className="p-4 mb-4">
                 <h2 className="fw-light fs-4">Here's your overview for today.</h2>
+                {habitError && <p role="alert" className="text-danger">{habitError}</p>}
+
                 <table className="habits-table">
                     <thead>
                         <tr>
@@ -365,6 +449,7 @@ export function Dashboard({ userName }) {
                                             type="checkbox"
                                             checked={isHabitCompleteToday(habit.id)}
                                             onChange={() => toggleHabitCompletion(habit.id)}
+                                            disabled={completionsLoading}
                                         />
 
                                         {isHabitCompleteToday(habit.id)
