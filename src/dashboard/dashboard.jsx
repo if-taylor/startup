@@ -139,7 +139,48 @@ export function Dashboard({ userName }) {
     }, [userName]);
 
     React.useEffect(() => {
-        setWeather(getWeather());
+        async function loadWeather() {
+            try {
+                const response = await fetch(
+                    'https://api.open-meteo.com/v1/forecast?latitude=40.76&longitude=-111.89&current=temperature_2m,weather_code&temperature_unit=fahrenheit'
+                );
+
+                if (!response.ok) {
+                    throw new Error('Weather request failed');
+                }
+
+                const data = await response.json();
+
+                const weatherCodes = {
+                    0: 'Clear sky',
+                    1: 'Mostly clear',
+                    2: 'Partly cloudy',
+                    3: 'Overcast',
+                    45: 'Foggy',
+                    48: 'Foggy',
+                    51: 'Light drizzle',
+                    53: 'Drizzle',
+                    55: 'Heavy drizzle',
+                    61: 'Light rain',
+                    63: 'Rain',
+                    65: 'Heavy rain',
+                    71: 'Light snow',
+                    73: 'Snow',
+                    75: 'Heavy snow',
+                    95: 'Thunderstorm',
+                };
+
+                setWeather({
+                    temperature: Math.round(data.current.temperature_2m),
+                    condition: weatherCodes[data.current.weather_code] || 'Mixed conditions',
+                    location: 'Salt Lake City',
+                });
+            } catch (error) {
+                console.error('Failed to load weather:', error);
+            }
+        }
+
+        loadWeather();
     }, []);
 
     React.useEffect(() => {
@@ -426,15 +467,6 @@ export function Dashboard({ userName }) {
 
     function getNextTask(goal) {
         return goal.tasks.find((task) => !task.completed);
-    }
-
-    function getWeather() {
-        // This will be replaced with a third-party weather service call.
-        return {
-            temperature: 68,
-            condition: 'Partly cloudy',
-            location: 'Viridian City',
-        };
     }
 
     return (
