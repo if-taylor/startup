@@ -10,11 +10,36 @@ import { Login } from "./login/login";
 
 
 export default function App() {
-    const [userName, setUserName] = React.useState(() => {
-        return localStorage.getItem('userName') || '';
-    });
+    const [userName, setUserName] = React.useState('');
+    const [authLoading, setAuthLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        async function checkAuth() {
+            try {
+                const response = await fetch('/api/auth/me');
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setUserName(data.email);
+                } else {
+                    setUserName('');
+                }
+            } catch (error) {
+                console.error('Authentication check failed:', error);
+                setUserName('');
+            } finally {
+                setAuthLoading(false);
+            }
+        }
+
+        checkAuth();
+    }, []);
 
     function RequireAuth({ userName, children }) {
+        if (authLoading) {
+            return <div className="container mt-4">Loading...</div>;
+        }
+
         if (!userName) {
             return <Navigate to="/login" replace />;
         }
