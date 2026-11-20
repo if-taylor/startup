@@ -9,7 +9,6 @@ const app = express();
 const authCookieName = 'token';
 
 // Temporary in-memory storage
-let goals = [];
 let habits = [];
 let habitCompletions = [];
 let events = [];
@@ -149,21 +148,17 @@ async function requireAuth(req, res, next) {
     }
 }
 
-//
 // GET /api/goals - Retrieve user's goals
-//
-apiRouter.get('/goals', requireAuth, (req, res) => {
-    const userGoals = goals.filter(
-        (goal) => goal.owner === req.user.email
-    );
+apiRouter.get('/goals', requireAuth, async (req, res) => {
+    const userGoals = await database.goalCollection
+        .find({ owner: req.user.email }, { projection: { _id: 0 } })
+        .toArray();
 
     res.send(userGoals);
 });
 
-//
 // POST /api/goals - Create a new goal
-//
-apiRouter.post('/goals', requireAuth, (req, res) => {
+apiRouter.post('/goals', requireAuth, async (req, res) => {
     const { name, dueDate, tasks, completedDate } = req.body;
 
     if (typeof name !== 'string' || !name.trim()) {
@@ -198,19 +193,26 @@ apiRouter.post('/goals', requireAuth, (req, res) => {
             : null,
     };
 
-    goals.push(goal);
-    res.status(201).send(goal);
+    await database.goalCollection.insertOne(goal);
+
+    res.status(201).send({
+        id: goal.id,
+        owner: goal.owner,
+        name: goal.name,
+        dueDate: goal.dueDate,
+        tasks: goal.tasks,
+        completedDate: goal.completedDate,
+    });
 });
 
-//
 // PUT /api/goals/:id - Update an existing goal
-//
-apiRouter.put('/goals/:id', requireAuth, (req, res) => {
-    const goal = goals.find(
-        (goal) =>
-            goal.id === req.params.id &&
-            goal.owner === req.user.email
-    );
+apiRouter.put('/goals/:id', requireAuth, async (req, res) => {
+    const filter = {
+        id: req.params.id,
+        owner: req.user.email,
+    };
+
+    const goal = await database.goalCollection.findOne(filter);
 
     if (!goal) {
         return res.status(404).send({
@@ -239,16 +241,18 @@ apiRouter.put('/goals/:id', requireAuth, (req, res) => {
         });
     }
 
+    const updates = {};
+
     if (name !== undefined) {
-        goal.name = name.trim();
+        updates.name = name.trim();
     }
 
     if (dueDate !== undefined) {
-        goal.dueDate = dueDate;
+        updates.dueDate = dueDate;
     }
 
     if (tasks !== undefined) {
-        goal.tasks = tasks.map((task) => ({
+        updates.tasks = tasks.map((task) => ({
             id: task.id || randomUUID(),
             name: task.name.trim(),
             completed: task.completed === true,
@@ -257,29 +261,37 @@ apiRouter.put('/goals/:id', requireAuth, (req, res) => {
     }
 
     if (completedDate !== undefined) {
-        goal.completedDate = completedDate;
+        updates.completedDate = completedDate;
     }
 
-    res.send(goal);
-});
+    if (Object.keys(updates).length > 0) {
+        await database.goalCollection.updateOne(
+            filter,
+            { $set: updates }
+        );
+    }
 
-//
-// DELETE /api/goals/:id - Delete a goal
-//
-apiRouter.delete('/goals/:id', requireAuth, (req, res) => {
-    const index = goals.findIndex(
-        (goal) =>
-            goal.id === req.params.id &&
-            goal.owner === req.user.email
+    const updatedGoal = await database.goalCollection.findOne(
+        filter,
+        { projection: { _id: 0 } }
     );
 
-    if (index === -1) {
+    res.send(updatedGoal);
+});
+
+// DELETE /api/goals/:id - Delete a goal
+apiRouter.delete('/goals/:id', requireAuth, async (req, res) => {
+    const result = await database.goalCollection.deleteOne({
+        id: req.params.id,
+        owner: req.user.email,
+    });
+
+    if (result.deletedCount === 0) {
         return res.status(404).send({
             message: 'Goal not found',
         });
     }
 
-    goals.splice(index, 1);
     res.status(204).end();
 });
 
