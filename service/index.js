@@ -8,9 +8,6 @@ const database = require('./database.js');
 const app = express();
 const authCookieName = 'token';
 
-// Temporary in-memory storage
-let events = [];
-
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
 app.set('trust proxy', 1);
@@ -453,19 +450,17 @@ apiRouter.post('/habits/completions', requireAuth, async (req, res) => {
 
 
 
-//
 // GET /api/events - Retrieve user's events
-//
-apiRouter.get('/events', requireAuth, (req, res) => {
-    res.send(events.filter(
-        (event) => event.owner === req.user.email
-    ));
+apiRouter.get('/events', requireAuth, async (req, res) => {
+    const userEvents = await database.eventCollection
+        .find({ owner: req.user.email }, { projection: { _id: 0 } })
+        .toArray();
+
+    res.send(userEvents);
 });
 
-//
 // POST /api/events - Create an event
-//
-apiRouter.post('/events', requireAuth, (req, res) => {
+apiRouter.post('/events', requireAuth, async (req, res) => {
     const { name, date, startTime, endTime } = req.body;
 
     if (typeof name !== 'string' || !name.trim() ||
@@ -486,23 +481,14 @@ apiRouter.post('/events', requireAuth, (req, res) => {
         endTime,
     };
 
-    events.push(event);
-    res.status(201).send(event);
+    await database.eventCollection.insertOne(event);
+
+    const { _id, ...responseEvent } = event;
+    res.status(201).send(responseEvent);
 });
 
-//
 // PUT /api/events/:id - Update an event
-//
-apiRouter.put('/events/:id', requireAuth, (req, res) => {
-    const event = events.find(
-        (event) => event.id === req.params.id &&
-            event.owner === req.user.email
-    );
-
-    if (!event) {
-        return res.status(404).send({ message: 'Event not found' });
-    }
-
+apiRouter.put('/events/:id', requireAuth, async (req, res) => {
     const { name, date, startTime, endTime } = req.body;
 
     if (typeof name !== 'string' || !name.trim() ||
@@ -514,28 +500,45 @@ apiRouter.put('/events/:id', requireAuth, (req, res) => {
         return res.status(400).send({ message: 'Invalid event data' });
     }
 
-    event.name = name.trim();
-    event.date = date;
-    event.startTime = startTime;
-    event.endTime = endTime;
+    const filter = {
+        id: req.params.id,
+        owner: req.user.email,
+    };
 
-    res.send(event);
-});
-
-//
-// DELETE /api/events/:id - Delete an event
-//
-apiRouter.delete('/events/:id', requireAuth, (req, res) => {
-    const index = events.findIndex(
-        (event) => event.id === req.params.id &&
-            event.owner === req.user.email
+    const updatedEvent = await database.eventCollection.findOneAndUpdate(
+        filter,
+        {
+            $set: {
+                name: name.trim(),
+                date,
+                startTime,
+                endTime,
+            },
+        },
+        {
+            returnDocument: 'after',
+            projection: { _id: 0 },
+        }
     );
 
-    if (index === -1) {
+    if (!updatedEvent) {
         return res.status(404).send({ message: 'Event not found' });
     }
 
-    events.splice(index, 1);
+    res.send(updatedEvent);
+});
+
+// DELETE /api/events/:id - Delete an event
+apiRouter.delete('/events/:id', requireAuth, async (req, res) => {
+    const result = await database.eventCollection.deleteOne({
+        id: req.params.id,
+        owner: req.user.email,
+    });
+
+    if (result.deletedCount === 0) {
+        return res.status(404).send({ message: 'Event not found' });
+    }
+
     res.status(204).end();
 });
 
