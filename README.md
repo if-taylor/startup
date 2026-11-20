@@ -157,9 +157,9 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **Stores data in MongoDB** - I did not complete this part of the deliverable.
-- [ ] **Stores credentials in MongoDB** - I did not complete this part of the deliverable.
+- [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits).
+- [x] **Stores data in MongoDB** - I implemented MongoDB Atlas integration to persistently store users, goals, habits, habit completions, and scheduled events. Also verified that data persists when the server restarts and is accessible in both development and production.
+- [x] **Stores credentials in MongoDB** - Implemented persistent user authentication using MongoDB to store account credentials, hashed passwords, and authentication tokens. Verified that users can log in across sessions and server restarts.
 
 ## 🚀 WebSocket deliverable
 
