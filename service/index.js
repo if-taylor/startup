@@ -9,8 +9,6 @@ const app = express();
 const authCookieName = 'token';
 
 // Temporary in-memory storage
-let habits = [];
-let habitCompletions = [];
 let events = [];
 
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
@@ -296,21 +294,17 @@ apiRouter.delete('/goals/:id', requireAuth, async (req, res) => {
 });
 
 
-//
 // GET /api/habits - Retrieve user's habits
-//
-apiRouter.get('/habits', requireAuth, (req, res) => {
-    const userHabits = habits.filter(
-        (habit) => habit.owner === req.user.email
-    );
+apiRouter.get('/habits', requireAuth, async (req, res) => {
+    const userHabits = await database.habitCollection
+        .find({ owner: req.user.email }, { projection: { _id: 0 } })
+        .toArray();
 
     res.send(userHabits);
 });
 
-//
 // POST /api/habits - Create a habit
-//
-apiRouter.post('/habits', requireAuth, (req, res) => {
+apiRouter.post('/habits', requireAuth, async (req, res) => {
     const { name, frequency } = req.body;
 
     if (typeof name !== 'string' || !name.trim() ||
@@ -325,23 +319,14 @@ apiRouter.post('/habits', requireAuth, (req, res) => {
         frequency,
     };
 
-    habits.push(habit);
-    res.status(201).send(habit);
+    await database.habitCollection.insertOne(habit);
+
+    const { _id, ...responseHabit } = habit;
+    res.status(201).send(responseHabit);
 });
 
-//
 // PUT /api/habits/:id - Update a habit
-//
-apiRouter.put('/habits/:id', requireAuth, (req, res) => {
-    const habit = habits.find(
-        (habit) => habit.id === req.params.id &&
-            habit.owner === req.user.email
-    );
-
-    if (!habit) {
-        return res.status(404).send({ message: 'Habit not found' });
-    }
-
+apiRouter.put('/habits/:id', requireAuth, async (req, res) => {
     const { name, frequency } = req.body;
 
     if (typeof name !== 'string' || !name.trim() ||
@@ -349,62 +334,70 @@ apiRouter.put('/habits/:id', requireAuth, (req, res) => {
         return res.status(400).send({ message: 'Invalid habit data' });
     }
 
-    habit.name = name.trim();
-    habit.frequency = frequency;
+    const filter = {
+        id: req.params.id,
+        owner: req.user.email,
+    };
 
-    res.send(habit);
-});
-
-//
-// DELETE /api/habits/completions - Undo completion
-//
-apiRouter.delete('/habits/completions', requireAuth, (req, res) => {
-    const { habitId, date } = req.body;
-
-    const index = habitCompletions.findIndex(
-        (completion) =>
-            completion.owner === req.user.email &&
-            completion.habitId === habitId &&
-            completion.date === date
+    const result = await database.habitCollection.findOneAndUpdate(
+        filter,
+        { $set: { name: name.trim(), frequency } },
+        { returnDocument: 'after', projection: { _id: 0 } }
     );
 
-    if (index === -1) {
-        return res.status(404).send({ message: 'Completion not found' });
-    }
-
-    habitCompletions.splice(index, 1);
-    res.status(204).end();
-});
-
-//
-// DELETE /api/habits/:id - Delete a habit
-//
-apiRouter.delete('/habits/:id', requireAuth, (req, res) => {
-    const index = habits.findIndex(
-        (habit) => habit.id === req.params.id &&
-            habit.owner === req.user.email
-    );
-
-    if (index === -1) {
+    if (!result) {
         return res.status(404).send({ message: 'Habit not found' });
     }
 
-    habits.splice(index, 1);
+    res.send(result);
+});
+
+// DELETE /api/habits/completions - Undo completion
+apiRouter.delete('/habits/completions', requireAuth, async (req, res) => {
+    const { habitId, date } = req.body;
+
+    const result = await database.completionCollection.deleteOne({
+        owner: req.user.email,
+        habitId,
+        date,
+    });
+
+    if (result.deletedCount === 0) {
+        return res.status(404).send({ message: 'Completion not found' });
+    }
+
     res.status(204).end();
 });
 
+// DELETE /api/habits/:id - Delete a habit
+apiRouter.delete('/habits/:id', requireAuth, async (req, res) => {
+    const result = await database.habitCollection.deleteOne({
+        id: req.params.id,
+        owner: req.user.email,
+    });
 
-//
+    if (result.deletedCount === 0) {
+        return res.status(404).send({ message: 'Habit not found' });
+    }
+
+    // Remove completion history for the deleted habit
+    await database.completionCollection.deleteMany({
+        habitId: req.params.id,
+        owner: req.user.email,
+    });
+
+    res.status(204).end();
+});
+
 // GET /api/habits/completions - Retrieve completion history
-//
-apiRouter.get('/habits/completions', requireAuth, (req, res) => {
-    const userCompletions = habitCompletions.filter(
-        (completion) => completion.owner === req.user.email
-    );
+apiRouter.get('/habits/completions', requireAuth, async (req, res) => {
+    const completions = await database.completionCollection
+        .find({ owner: req.user.email })
+        .toArray();
 
     const result = {};
 
-    for (const completion of userCompletions) {
+    for (const completion of completions) {
         if (!result[completion.date]) {
             result[completion.date] = [];
         }
@@ -415,10 +408,8 @@ apiRouter.get('/habits/completions', requireAuth, (req, res) => {
     res.send(result);
 });
 
-//
 // POST /api/habits/completions - Mark a habit complete
-//
-apiRouter.post('/habits/completions', requireAuth, (req, res) => {
+apiRouter.post('/habits/completions', requireAuth, async (req, res) => {
     const { habitId, date } = req.body;
 
     if (typeof habitId !== 'string' ||
@@ -427,31 +418,35 @@ apiRouter.post('/habits/completions', requireAuth, (req, res) => {
         return res.status(400).send({ message: 'Invalid completion data' });
     }
 
-    const habit = habits.find(
-        (habit) => habit.id === habitId &&
-            habit.owner === req.user.email
-    );
+    const habit = await database.habitCollection.findOne({
+        id: habitId,
+        owner: req.user.email,
+    });
 
     if (!habit) {
         return res.status(404).send({ message: 'Habit not found' });
     }
 
-    const existing = habitCompletions.find(
-        (completion) =>
-            completion.owner === req.user.email &&
-            completion.habitId === habitId &&
-            completion.date === date
-    );
+    const filter = {
+        owner: req.user.email,
+        habitId,
+        date,
+    };
+
+    const existing = await database.completionCollection.findOne(filter);
 
     if (existing) {
         return res.status(409).send({ message: 'Habit already completed' });
     }
 
-    habitCompletions.push({
-        owner: req.user.email,
-        habitId,
-        date,
-    });
+    try {
+        await database.completionCollection.insertOne(filter);
+    } catch (error) {
+        if (error.code === 11000) {
+            return res.status(409).send({ message: 'Habit already completed' });
+        }
+        throw error;
+    }
 
     res.status(201).send({ habitId, date });
 });

@@ -16,6 +16,10 @@ const eventCollection = db.collection('event');
 async function connectDatabase() {
     await db.command({ ping: 1 });
     await userCollection.createIndex({ email: 1 }, { unique: true });
+    await completionCollection.createIndex(
+        { owner: 1, habitId: 1, date: 1 },
+        { unique: true }
+    );
     console.log('Connected to LiveMyGospel MongoDB database');
 }
 
