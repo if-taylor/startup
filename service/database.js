@@ -20,6 +20,9 @@ async function connectDatabase() {
         { owner: 1, habitId: 1, date: 1 },
         { unique: true }
     );
+    await goalCollection.createIndex({ owner: 1, id: 1 }, { unique: true });
+    await habitCollection.createIndex({ owner: 1, id: 1 }, { unique: true });
+    await eventCollection.createIndex({ owner: 1, id: 1 }, { unique: true });
     console.log('Connected to LiveMyGospel MongoDB database');
 }
 
