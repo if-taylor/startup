@@ -542,6 +542,18 @@ apiRouter.delete('/events/:id', requireAuth, async (req, res) => {
     res.status(204).end();
 });
 
+// Handle unexpected server and database errors
+app.use((error, req, res, next) => {
+    console.error('Server error:', error);
+
+    if (res.headersSent) {
+        return next(error);
+    }
+
+    res.status(500).send({
+        message: 'An unexpected server error occurred',
+    });
+});
 
 // Connect to MongoDB before starting the Express server
 async function startServer() {
