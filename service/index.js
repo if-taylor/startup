@@ -3,12 +3,12 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const { randomUUID } = require('crypto');
+const database = require('./database.js');
 
 const app = express();
 const authCookieName = 'token';
 
 // Temporary in-memory storage
-let users = [];
 let goals = [];
 let habits = [];
 let habitCompletions = [];
@@ -26,7 +26,7 @@ app.use('/api', apiRouter);
 
 // Test endpoint
 apiRouter.get('/status', (req, res) => {
-    res.send({ status: 'LiveMyGoals service is running' });
+    res.send({ status: 'LiveMyGospel service is running' });
 });
 
 // Create a new account
@@ -38,19 +38,28 @@ apiRouter.post('/auth/create', async (req, res) => {
         return res.status(400).send({ message: 'Email and password are required' });
     }
 
-    if (users.find((user) => user.email === email)) {
+    const existingUser = await database.userCollection.findOne({ email });
+
+    if (existingUser) {
         return res.status(409).send({ message: 'Account already exists' });
     }
 
     const user = {
-        email: email,
+        email,
         password: await bcrypt.hash(password, 10),
         token: randomUUID(),
     };
 
-    users.push(user);
-    setAuthCookie(res, user.token, req);
+    try {
+        await database.userCollection.insertOne(user);
+    } catch (error) {
+        if (error.code === 11000) {
+            return res.status(409).send({ message: 'Account already exists' });
+        }
+        throw error;
+    }
 
+    setAuthCookie(res, user.token, req);
     res.status(201).send({ email: user.email });
 });
 
@@ -58,25 +67,33 @@ apiRouter.post('/auth/create', async (req, res) => {
 apiRouter.post('/auth/login', async (req, res) => {
     const { email, password } = req.body;
 
-    const user = users.find((user) => user.email === email);
+    const user = await database.userCollection.findOne({ email });
 
     if (!user || typeof password !== 'string' ||
         !(await bcrypt.compare(password, user.password))) {
         return res.status(401).send({ message: 'Invalid email or password' });
     }
 
-    user.token = randomUUID();
-    setAuthCookie(res, user.token, req);
+    const token = randomUUID();
 
+    await database.userCollection.updateOne(
+        { email },
+        { $set: { token } }
+    );
+
+    setAuthCookie(res, token, req);
     res.send({ email: user.email });
 });
 
 // Log out
-apiRouter.delete('/auth/logout', (req, res) => {
-    const user = users.find((user) => user.token === req.cookies[authCookieName]);
+apiRouter.delete('/auth/logout', async (req, res) => {
+    const token = req.cookies[authCookieName];
 
-    if (user) {
-        user.token = null;
+    if (token) {
+        await database.userCollection.updateOne(
+            { token },
+            { $set: { token: null } }
+        );
     }
 
     res.clearCookie(authCookieName, { path: '/' });
@@ -84,8 +101,12 @@ apiRouter.delete('/auth/logout', (req, res) => {
 });
 
 // Check current authentication
-apiRouter.get('/auth/me', (req, res) => {
-    const user = users.find((user) => user.token === req.cookies[authCookieName]);
+apiRouter.get('/auth/me', async (req, res) => {
+    const token = req.cookies[authCookieName];
+
+    const user = token
+        ? await database.userCollection.findOne({ token })
+        : null;
 
     if (!user) {
         return res.status(401).send({ message: 'Not authenticated' });
@@ -106,24 +127,26 @@ function setAuthCookie(res, token, req) {
 }
 
 
-//
 // Middleware to verify authentication
-//
-function requireAuth(req, res, next) {
-    const token = req.cookies[authCookieName];
+async function requireAuth(req, res, next) {
+    try {
+        const token = req.cookies[authCookieName];
 
-    if (!token) {
-        return res.status(401).send({ message: 'Not authenticated' });
+        if (!token) {
+            return res.status(401).send({ message: 'Not authenticated' });
+        }
+
+        const user = await database.userCollection.findOne({ token });
+
+        if (!user) {
+            return res.status(401).send({ message: 'Not authenticated' });
+        }
+
+        req.user = user;
+        next();
+    } catch (error) {
+        next(error);
     }
-
-    const user = users.find((user) => user.token === token);
-
-    if (!user) {
-        return res.status(401).send({ message: 'Not authenticated' });
-    }
-
-    req.user = user;
-    next();
 }
 
 //
@@ -510,6 +533,18 @@ apiRouter.delete('/events/:id', requireAuth, (req, res) => {
 });
 
 
-app.listen(port, () => {
-    console.log(`LiveMyGospel service listening on port ${port}`);
-});
+// Connect to MongoDB before starting the Express server
+async function startServer() {
+    try {
+        await database.connectDatabase();
+
+        app.listen(port, () => {
+            console.log(`LiveMyGospel service listening on port ${port}`);
+        });
+    } catch (error) {
+        console.error('Database connection failed:', error.message);
+        process.exit(1);
+    }
+}
+
+startServer();
